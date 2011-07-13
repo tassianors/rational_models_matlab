@@ -43,7 +43,7 @@ for m=1:M
     end
    % plot_y_y1(y);
     plot(y,'.');
-    psi = f_get_psi(y, t_exp, nn_nd_dim, nn_dim);
+    psi = f_get_psi(y, u, nn_nd_dim, nn_dim,  t_exp, yu, yu_regr);
     %inv(psi'*psi)*psi'*y
     theta(1,:)=(psi'*psi)\(psi'*y);
     
@@ -56,8 +56,7 @@ for m=1:M
         %% step 2 -  calc the variance
         v(l)=cov(y-yc);
         %step 4
-        PHY=f_get_PHY(nn_nd_dim, nn_dim, y, t_exp);
-        
+        PHY=f_get_PHY(y, nn_nd_dim, nn_dim, t_exp, yu, yu_regr);
         for i=nn_dim+1:nn_nd_dim
             aux=0;
             for k=1:N
