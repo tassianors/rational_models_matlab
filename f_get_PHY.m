@@ -1,5 +1,5 @@
-function PHY = f_get_PHY(y, m_dim, m_n_dim, m_texp, m_yu, m_regr)
-%% Gets the PHY based on the model structure
+function [phy phym] = f_get_phy(y, m_dim, m_n_dim, m_texp, m_yu, m_regr)
+%% Gets the phy based on the model structure
 % y:: output system data [y1,..,yn]
 %% Model
 % m_dim:: Total dimension (num+den dimensions)
@@ -18,8 +18,10 @@ if max(size(m_yu)) < m_dim || max(size(m_regr)) < m_dim || max(size(m_texp)) < m
     error('invalid parameter dimenstion');
 end
 
+% initialization
 N=max(size(y,1));
-PHY=zeros(m_dim,m_n_dim);
+phy=zeros(m_dim,m_n_dim);
+phym=zeros(m_dim,1);
 
 for i=1:m_dim
     for j=1:m_dim
@@ -28,8 +30,15 @@ for i=1:m_dim
             for k=1:N
                 aux=aux+((y(k)^m_texp(j))* (y(k)^m_texp(i)));
             end
-            PHY(i,j)=aux;
+            phy(i,j)=aux;
         end
     end
+end
+for i=m_n_dim+1:m_dim
+    aux=0;
+    for k=1:N
+        aux=aux-(y(k)^m_texp(i));
+    end
+    phym(i,1)=aux;
 end
 end

@@ -1,5 +1,8 @@
 function f_draw_elipse(vetA, vetB)
-
+%% Plots a elipse with 95% of confiability based on data in vetA and vetB
+% vetA:: data vector of variable A
+% vetB:: data vector of variable B
+%%
 figure;
 [N, M]=size(vetA);
 if M > N

@@ -1,7 +1,6 @@
-function y = f_y_model(y_init, N, u, theta, m_n_dim, m_texp, m_yu, m_regr)
+function y = f_y_model(y_init, u, theta, m_n_dim, m_texp, m_yu, m_regr)
 %% Gets the y based on the model structure
 % y_init:: Initial value for y, can be a array [y(1), y(2), ...]
-% N:: size of Y
 % u:: input signal [u1,u2,u3,...]
 % theta:: estimative of parameters for the model
 %% Model
@@ -12,6 +11,7 @@ function y = f_y_model(y_init, N, u, theta, m_n_dim, m_texp, m_yu, m_regr)
 % m_regr:: array whith the regretion dimension (y(k-1) is 1) always
 %          positive values.
 %%
+N=max(size(u));
 y=zeros(N, 1);
 % init the y array
 for j=1: size(y_init,2)

@@ -22,6 +22,7 @@ if max(size(m_yu)) < m_dim || max(size(m_regr)) < m_dim || max(size(m_texp)) < m
 end
 %% step 1 - first estimative
 N=max(size(y,1));
+psi=zeros(N,m_dim);
 
 for i=max(abs(m_regr))+1:N
     % step 3 - we can neglect the noise model (colun 6)
