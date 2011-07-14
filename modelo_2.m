@@ -9,7 +9,7 @@ mod_texp    = [2 1 1 3];
 mod_yu      = [1 1 0 1];
 mod_regr    = [1 2 1 2];
 %%
-% number of points on simulation
+% number of points in simulation
 N=100;
 % number of simulations
 M=10;
@@ -18,7 +18,7 @@ np=0.0005;
 %% initialization variables
 y=zeros(N, 1);
 u=ones(N, 1);
-
+% initial conditions
 y(1)=rand(1)*0.1;
 y(2)=rand(1)*0.1;
 
@@ -62,7 +62,7 @@ for m=1:M
     end
     theta
     delta
-    v
+    v'
     %f_plot_y_y1(yc);
 end %J
 
