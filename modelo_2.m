@@ -10,17 +10,17 @@ mod_yu      = [1 1 0 1];
 mod_regr    = [1 2 1 2];
 %%
 % number of points in simulation
-N=100;
+N=1000;
 % number of simulations
-M=10;
+M=100;
 %noise power
 np=0.0005;
 %% initialization variables
 y=zeros(N, 1);
 u=ones(N, 1);
 % initial conditions
-y(1)=rand(1)*0.1;
-y(2)=rand(1)*0.1;
+y(1)=0;
+y(2)=0;
 
 %% Real system - variables
 a1=.3;
@@ -43,9 +43,6 @@ for m=1:M
     % we can't have a precision bigger than the noise power
     while (max(abs(err)) > np*2)
         yc=f_y_model([y(1) y(2)], u, theta(l,:), num_dim, mod_texp, mod_yu, mod_regr);
-        if l ==1
-            f_plot_y_y1(yc);
-        end
         %% step 2 -  calc the variance
         v(l)=cov(y-yc);
         [PHY phy]=f_get_phy(y, model_dim, num_dim, mod_texp, mod_yu, mod_regr);
