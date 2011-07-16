@@ -3,13 +3,7 @@ function y = f_y_model(y_init, u, theta, m)
 % y_init:: Initial value for y, can be a array [y(1), y(2), ...]
 % u:: input signal [u1,u2,u3,...]
 % theta:: estimative of parameters for the model
-%% Model
-% m.n_dim:: Total dimension (num+den dimensions)
-% m.texp::exponential coef from the model
-% m.yu:: one is y, 0 is u. defines witch one of the coef are dependent of y
-%        and u. should be a array with the same size of #m.texp.
-% m.regr:: array whith the regretion dimension (y(k-1) is 1) always
-%          positive values.
+% m:: model
 %%
 N=max(size(u));
 y=zeros(N, 1);
