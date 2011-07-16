@@ -18,14 +18,10 @@ for j=1: size(y_init,2)
     y(j)=y_init(j);
 end
 m_dim=size(theta,2);
-
+f_check_model(m);
 % check parameters
-if m.n_dim > m_dim
-    error('size of theta must be bigger than m.n_dim');
-end
-
-if max(size(m.yu)) < m_dim || max(size(m.regr)) < m_dim || max(size(m.texp)) < m_dim
-    error('invalid parameter dimenstion');
+if m.dim ~= m_dim
+    error('size of theta must be the same as model dimension');
 end
 
 for k=max(abs(m.regr))+1:N

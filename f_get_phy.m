@@ -11,12 +11,7 @@ function [phy phym] = f_get_phy(y, m)
 %          positive values.
 %%
 
-if m.n_dim > m.dim
-    error('m.dim must be bigget than m.n_dim');
-end
-if max(size(m.yu)) < m.dim || max(size(m.regr)) < m.dim || max(size(m.texp)) < m.dim
-    error('invalid parameter dimenstion');
-end
+f_check_model(m);
 
 % initialization
 N=max(size(y,1));
