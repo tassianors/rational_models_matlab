@@ -1,23 +1,18 @@
 %% Aguirre 10.4
 close all; clear all;
-clc
-%% model
-num_dim=3;
-den_dim=1;
-model_dim=num_dim+den_dim;
-mod_texp    = [2 1 1 3];
-mod_yu      = [1 1 0 1];
-mod_regr    = [1 2 1 2];
-%%
-% number of points in simulation
-N=1000;
-% number of simulations
-M=100;
-%noise power
-np=0.0005;
+clc;
+%% model parameter definition
+model.n_dim   = 3;
+model.dim     = 4;
+model.texp    = [2 1 1 3];
+model.yu      = [1 1 0 1];
+model.regr    = [1 2 1 2];
+%% Simulation parameters
+simul=struct('N', 100, 'nEstimates', 20, 'np', 0.0005); 
+
 %% initialization variables
-y=zeros(N, 1);
-u=ones(N, 1);
+y=zeros(simul.N, 1);
+u=ones(simul.N, 1);
 % initial conditions
 y(1)=0;
 y(2)=0;
@@ -28,24 +23,24 @@ a2=-2;
 a3=1.5;
 b1=-.2;
 
-for m=1:M
+for m=1:simul.nEstimates
     %% Simulation of real system
-    for k=max(abs(mod_regr))+1:N
-        y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1-b1*y(k-2)^3)+rand(1)*np;
+    for k=max(abs(model.regr))+1:simul.N
+        y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1-b1*y(k-2)^3)+rand(1)*simul.np;
     end
 
-    psi = f_get_psi(y, u, model_dim, num_dim,  mod_texp, mod_yu, mod_regr);
+    psi = f_get_psi(y, u, model);
     theta(1,:)=(psi'*psi)\(psi'*y);
     
     %% here we got the first estimative, now we start the loop
     l=1;
-    err=ones(1+np*2, model_dim);
+    err=ones(1+simul.np*2, model.dim);
     % we can't have a precision bigger than the noise power
-    while (max(abs(err)) > np*2)
-        yc=f_y_model([y(1) y(2)], u, theta(l,:), num_dim, mod_texp, mod_yu, mod_regr);
+    while (max(abs(err)) > simul.np*2)
+        yc=f_y_model([y(1) y(2)], u, theta(l,:), model);
         %% step 2 -  calc the variance
         v(l)=cov(y-yc);
-        [PHY phy]=f_get_phy(y, model_dim, num_dim, mod_texp, mod_yu, mod_regr);
+        [PHY phy]=f_get_phy(y, model);
         
         theta(l+1,:)=(psi'*psi-v(l)*PHY)\ (psi'*y-v(l)*phy);
         delta(l,:)=theta(l+1,:)-theta(l,:);
