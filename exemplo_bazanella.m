@@ -7,6 +7,7 @@ model.dim     = 5;
 model.texp    = [0 3 2 1 2];
 model.yu      = [1 1 1 1 1];
 model.regr    = [1 1 1 1 1];
+model.noise   = true;
 %% Simulation parameters
 simul=struct('N', 100, 'nEstimates', 20, 'np', 0.0005); 
 

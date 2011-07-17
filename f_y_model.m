@@ -11,10 +11,10 @@ y=zeros(N, 1);
 for j=1: size(y_init,2)
     y(j)=y_init(j);
 end
-m_dim=size(theta,2);
+m_dim=size(theta,2)
 f_check_model(m);
 % check parameters
-if m.dim ~= m_dim
+if m.dim+m.err_model ~= m_dim
     error('size of theta must be the same as model dimension');
 end
 

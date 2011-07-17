@@ -8,8 +8,8 @@ f_check_model(m);
 
 % initialization
 N=max(size(y,1));
-phy=zeros(m.dim,m.n_dim);
-phym=zeros(m.dim,1);
+phy=zeros(m.dim+m.err_model,m.dim+m.err_model);
+phym=zeros(m.dim+m.err_model,1);
 
 for i=1:m.dim
     for j=1:m.dim
