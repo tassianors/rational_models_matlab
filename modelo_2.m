@@ -9,7 +9,7 @@ model.yu      = [1 1 0 1];
 model.regr    = [1 2 1 2];
 model.err_model   = 0;
 %% Simulation parameters
-simul=struct('N', 100, 'nEstimates', 20, 'np', 0.0005); 
+simul=struct('N', 100, 'nEstimates', 3, 'np', 0.0005); 
 
 %% initialization variables
 y=zeros(simul.N, 1);
@@ -22,7 +22,7 @@ y(2)=0;
 %% Real system - variables
 a1=.3;
 a2=-2;
-a3=1.5;
+a3=1;
 b1=-.2;
 
 for m=1:simul.nEstimates
@@ -30,32 +30,36 @@ for m=1:simul.nEstimates
     for k=max(abs(model.regr))+1:simul.N
         y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1-b1*y(k-2)^3)+rand(1)*simul.np;
     end
-    if m==2
-        model.err_model   = 1;
-    end
+    figure;
+    stem(y);
+    model.err_model   = 0;
     psi = f_get_psi(y, yc, u, model);
-    % only after the first estimative, calc using the error model
-
-    if m ==2 && size(psi,2) ~= size(theta,2) 
-        %m>1 && model.err_model == 1
-        % enlarge the matrix.
-        theta(m, model.dim+model.err_model)=0;
-        delta(m, model.dim+model.err_model)=0;
-    end
-    theta(1,:)=(psi'*psi)\(psi'*y)
+    theta(1,:)=(psi'*psi)\(psi'*y);
 
     %% here we got the first estimative, now we start the loop
     l=1;
-    err=ones(1+simul.np*2, model.dim);
+    err=ones(1, model.dim);
     % we can't have a precision bigger than the err_model power
-    while (max(abs(err)) > simul.np*2)
+    while (max(abs(err)) > simul.np)
         yc=f_y_model([y(1) y(2)], u, theta(l,:), model);
+    
+        % only after the first estimative, calc using the error model
+        if l == 1
+            model.err_model = 1;
+            % enlarge the matrix
+            theta(l+1, model.dim+model.err_model)=0;
+            delta(l+1, model.dim+model.err_model)=0;
+        end
+    
         %% step 2 -  calc the variance
         v(l)=cov(y-yc);
+        psi = f_get_psi(y, yc, u, model);
         [PHY phy]=f_get_phy(y, model);
         
-        theta(l+1,:)=(psi'*psi-v(l)*PHY)\ (psi'*y-v(l)*phy);
+        theta(l+1,:)=(psi'*psi-v(l)*PHY)\ (psi'*y-v(l)*phy)
         delta(l,:)=theta(l+1,:)-theta(l,:);
+        delta(l,model.dim+model.err_model)=0;
+     
         err(1,:)=delta(l);
         % to be used in graphic plotting
         nna(m)=theta(l+1,1);
@@ -64,9 +68,9 @@ for m=1:simul.nEstimates
         nda(m)=theta(l+1,4);
         l=l+1;
     end
-    theta
-    delta
-    v'
+    theta;
+    delta;
+    v';
     %f_plot_y_y1(yc);
 end %J
 
