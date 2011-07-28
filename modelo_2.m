@@ -8,9 +8,9 @@ model.texp    = [2 1 1 3];
 model.yu      = [1 1 0 1];
 model.regr    = [1 2 1 2];
 model.err_model   = 0;
-enable=1;
+enable=true;
 %% Simulation parameters
-simul=struct('N', 100, 'nEstimates', 20, 'np', 0.0005); 
+simul=struct('N', 200, 'nEstimates', 30, 'np', 0.0005); 
 
 %% initialization variables
 y=zeros(simul.N, 1);
@@ -24,7 +24,7 @@ y(2)=0;
 a1=.3;
 a2=-2;
 a3=1.5;
-b1=-.2;
+b1=.2;
 
 for m=1:simul.nEstimates
     clear theta delta v;
@@ -32,7 +32,7 @@ for m=1:simul.nEstimates
     model.err_model = 0;
     %% Simulation of real system
     for k=max(abs(model.regr))+1:simul.N
-        y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1-b1*y(k-2)^3)+rand(1)*simul.np;
+        y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1+b1*y(k-2)^3)+rand(1)*simul.np;
     end
     psi = f_get_psi(y, yc, u, model);
     theta(1,:)=(psi'*psi)\(psi'*y);
@@ -46,7 +46,7 @@ for m=1:simul.nEstimates
         yc=f_y_model([y(1) y(2)], u, theta(l,:), model);
     
         % only after the first estimative, calc using the error model
-        if l == 2 && enable == 1
+        if l == 2 && enable == true
             model.err_model = 1;
             % enlarge the matrix
             theta(l, model.dim+model.err_model)=0;
@@ -55,11 +55,11 @@ for m=1:simul.nEstimates
     
         %% step 2 -  calc the variance
         v(l)=cov(y-yc);
-        if l > 1
-            v_diff = v(l)-v(l-1);
-        else
-            v_diff=v(l);
-        end
+		if l > 1
+			v_diff = v(l)-v(l-1);
+		else
+			v_diff=v(l);
+		end
 
         psi = f_get_psi(y, yc, u, model);
         [PHY phy]=f_get_phy(y, model);
@@ -84,5 +84,5 @@ for m=1:simul.nEstimates
     %f_plot_y_y1(yc);
 end %J
 
-f_draw_elipse(nna, nnb)
-f_draw_elipse(nnc, nda)
+f_draw_elipse(nna, nnb, a1, a2);
+f_draw_elipse(nnc, nda, a3, b1);

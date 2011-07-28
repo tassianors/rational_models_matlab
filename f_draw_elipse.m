@@ -1,4 +1,4 @@
-function f_draw_elipse(vetA, vetB)
+function f_draw_elipse(vetA, vetB, realA, realB)
 %% Plots a elipse with 95% of confiability based on data in vetA and vetB
 % vetA:: data vector of variable A
 % vetB:: data vector of variable B
@@ -6,9 +6,9 @@ function f_draw_elipse(vetA, vetB)
 figure;
 [N, M]=size(vetA);
 if M > N
-    PN=[vetA', vetB'];
+	PN=[vetA', vetB'];
 else
-    PN=[vetA, vetB];
+	PN=[vetA, vetB];
 end
 ma=mean(vetA);
 mb=mean(vetB);
@@ -18,10 +18,17 @@ plot(vetA, vetB, 'bo');
 hold;
 plot(ma, mb, 'rx');
 hold;
+if realA ~= 0 && realB ~= 0
+	hold;
+ 	plot(realA, realB, 'kd');
+% 	hold;
+% 	hold
+% 	plot([realA realB], [ma mb])
+end
 title('Estimativa dos parametros do denominador')
 xlabel('Valor da estimativa para a variavel A')
 ylabel('Valor da estimativa para a variavel B')
-legend('Estimativas', 'Media')
+legend('Estimativas', 'Media', 'real')
 
 % chi^2 for 95% of confiability
 chi = 5.991;
