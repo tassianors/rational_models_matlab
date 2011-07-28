@@ -8,9 +8,9 @@ model.texp    = [2 1 1 3];
 model.yu      = [1 1 0 1];
 model.regr    = [1 2 1 2];
 model.err_model   = 0;
-enable=0;
+enable=1;
 %% Simulation parameters
-simul=struct('N', 100, 'nEstimates', 10, 'np', 0.001); 
+simul=struct('N', 100, 'nEstimates', 20, 'np', 0.0005); 
 
 %% initialization variables
 y=zeros(simul.N, 1);
@@ -23,7 +23,7 @@ y(2)=0;
 %% Real system - variables
 a1=.3;
 a2=-2;
-a3=1;
+a3=1.5;
 b1=-.2;
 
 for m=1:simul.nEstimates
@@ -34,8 +34,6 @@ for m=1:simul.nEstimates
     for k=max(abs(model.regr))+1:simul.N
         y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1-b1*y(k-2)^3)+rand(1)*simul.np;
     end
-%     figure;
-%     stem(y);
     psi = f_get_psi(y, yc, u, model);
     theta(1,:)=(psi'*psi)\(psi'*y);
 
