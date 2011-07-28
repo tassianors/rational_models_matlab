@@ -8,8 +8,9 @@ model.texp    = [2 1 1 3];
 model.yu      = [1 1 0 1];
 model.regr    = [1 2 1 2];
 model.err_model   = 0;
+enable=0;
 %% Simulation parameters
-simul=struct('N', 100, 'nEstimates', 3, 'np', 0.000001); 
+simul=struct('N', 100, 'nEstimates', 10, 'np', 0.001); 
 
 %% initialization variables
 y=zeros(simul.N, 1);
@@ -28,7 +29,7 @@ b1=-.2;
 for m=1:simul.nEstimates
     clear theta delta v;
     y=zeros(simul.N, 1);
-    model.err_model   = 0;
+    model.err_model = 0;
     %% Simulation of real system
     for k=max(abs(model.regr))+1:simul.N
         y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1-b1*y(k-2)^3)+rand(1)*simul.np;
@@ -43,11 +44,11 @@ for m=1:simul.nEstimates
     err=ones(1, model.dim);
     v_diff=1;
     % we can't have a precision bigger than the err_model power
-    while ((max(abs(err)) > 0.01 || abs(v_diff) > 0.01) && l < 100)
+    while ((max(abs(err)) > 0.01 || abs(v_diff) > 1) && l < 100)
         yc=f_y_model([y(1) y(2)], u, theta(l,:), model);
     
         % only after the first estimative, calc using the error model
-        if l == 2
+        if l == 2 && enable == 1
             model.err_model = 1;
             % enlarge the matrix
             theta(l, model.dim+model.err_model)=0;
@@ -72,7 +73,6 @@ for m=1:simul.nEstimates
         if max(size(err)) > model.dim
             err(1,model.dim+model.err_model)=0;
         end
-        err
         % to be used in graphic plotting
         nna(m)=theta(l+1,1);
         nnb(m)=theta(l+1,2);
