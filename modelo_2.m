@@ -8,27 +8,22 @@ model.texp    = [2 1 1 3];
 model.yu      = [1 1 0 1];
 model.regr    = [1 2 1 2];
 model.err_model   = 0;
-enable=false;
+enable=true;
 %% Simulation parameters
-simul=struct('N', 200, 'nEstimates', 30, 'np', 0.7); 
-
-%% initialization variables
-y=zeros(simul.N, 1);
-yc=y;
-u=ones(simul.N, 1);
-% initial conditions
-y(1)=0;
-y(2)=0;
+simul=struct('N', 200, 'nEstimates', 30, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1); 
 
 %% Real system - variables
-a1=.3;
-a2=-2;
-a3=1.5;
-b1=.2;
+a1=.3; a2=-2; a3=1.5; b1=.2;
 
 for m=1:simul.nEstimates
     clear theta delta v;
-    y=zeros(simul.N, 1);
+	%% initialization variables
+	y=zeros(simul.N, 1);
+	yc=y;
+	u=ones(simul.N, 1);
+	% initial conditions
+	y(1)=0;
+	y(2)=0;
     model.err_model = 0;
     %% Simulation of real system
     for k=max(abs(model.regr))+1:simul.N
@@ -42,9 +37,9 @@ for m=1:simul.nEstimates
     %% here we got the first estimative, now we start the loop
     l=1;
     err=ones(1, model.dim);
-    v_diff=1;
+    v_diff=simul.diffConv+1;
     % we can't have a precision bigger than the err_model power
-    while ((max(abs(err)) > 0.01 || abs(v_diff) > 1) && l < 100)
+   while ((max(abs(err)) > simul.maxError || abs(v_diff) > simul.diffConv) && l < simul.l)
         yc=f_y_model([y(1) y(2)], u, theta(l,:), model);
     
         % only after the first estimative, calc using the error model
