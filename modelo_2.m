@@ -8,9 +8,9 @@ model.texp    = [2 1 1 3];
 model.yu      = [1 1 0 1];
 model.regr    = [1 2 1 2];
 model.err_model   = 0;
-enable=true;
+enable=false;
 %% Simulation parameters
-simul=struct('N', 200, 'nEstimates', 30, 'np', 0.0005); 
+simul=struct('N', 200, 'nEstimates', 30, 'np', 0.7); 
 
 %% initialization variables
 y=zeros(simul.N, 1);
@@ -32,8 +32,10 @@ for m=1:simul.nEstimates
     model.err_model = 0;
     %% Simulation of real system
     for k=max(abs(model.regr))+1:simul.N
-        y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1+b1*y(k-2)^3)+rand(1)*simul.np;
-    end
+        y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1+b1*y(k-2)^3);%+rand(1)*simul.np;
+	end
+	% set randon noise
+	y=y+y.*+rand(simul.N,1)*(mean(y)/200*simul.np);
     psi = f_get_psi(y, yc, u, model);
     theta(1,:)=(psi'*psi)\(psi'*y);
 
