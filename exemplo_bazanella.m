@@ -8,9 +8,9 @@ model.texp    = [0 3 2 1 2];
 model.yu      = [1 1 1 1 1];
 model.regr    = [1 1 1 1 1];
 model.err_model   = 0;
-enable=false;
+enable=true;
 %% Simulation parameters
-simul=struct('N', 100, 'nEstimates', 20, 'np', 0.5); 
+simul=struct('N', 200, 'nEstimates', 5, 'np', 0.5); 
 
 %% initialization variables
 y=zeros(simul.N, 1);
@@ -25,23 +25,24 @@ a=2.6204; b=99.875; c=1417.1; d=46.429;
 for m=1:simul.nEstimates
     clear theta delta v;
     y=zeros(simul.N, 1);
+	y(1)=28+rand(1)*.5;
     model.err_model = 0;
     %% Simulation of real system
     for k=max(abs(model.regr))+1:simul.N
         y(k)=d*exp(22-y(k-1))+ ((a*y(k-1)^2-b*y(k-1)+c)/y(k-1));
 	end
 	% set randon noise
-	y=y+y.*+rand(simul.N,1)*(mean(y)/200*simul.np);
+	%y=y+y.*+rand(simul.N,1)*(mean(y)/200*simul.np);
 	
     psi = f_get_psi(y, yc, u, model);
-    theta(1,:)=(psi'*psi)\(psi'*y)
+    theta(1,:)=(psi'*psi)\(psi'*y);
 
     %% here we got the first estimative, now we start the loop
     l=1;
     err=ones(1, model.dim);
     v_diff=1;
     % we can't have a precision bigger than the err_model power
-    while ((max(abs(err)) > 0.01 || abs(v_diff) > 1) && l < 100)
+    while ((max(abs(err)) > 0.05 || abs(v_diff) > 1) && l < 100)
         yc=f_y_model(y(1) , u, theta(l,:), model);
     
         % only after the first estimative, calc using the error model
@@ -78,10 +79,10 @@ for m=1:simul.nEstimates
         ndb(m)=theta(l+1,5);
         l=l+1;
     end
-    theta
-    delta
-    v'
-    %f_plot_y_y1(yc);
+    theta;
+    delta;
+    v';
 end %J
 
-f_draw_elipse(nda, ndb)
+f_draw_elipse(nna, nnb, 8.658, 0.001223);
+f_draw_elipse(nda, ndb, -0.08381, 0.001766);
