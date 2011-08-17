@@ -10,11 +10,11 @@ f_check_model(m);
 
 %% step 1 - first estimative
 N=max(size(y));
-psi=zeros(N,m.dim+m.err_model);
+psi=zeros(N, m.dim+m.err_model);
 
 if m.err_model && max(size(y)) ~= max(size(yp))
-   error('y and last y (yp) have to have the same size'); 
-else 
+    error('y and last y (yp) have to have the same size');
+else
     err=y-yp;
 end
 
