@@ -30,7 +30,7 @@ for m=1:simul.nEstimates
         y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1+b1*y(k-2)^3);
 	end
 	% set randon noise
-	y=y+y.*+rand(simul.N,1)*(mean(y)/200*simul.np);
+    y=f_get_wnoise(y, simul.np);
     psi = f_get_psi(y, yc, u, model);
     theta(1,:)=(psi'*psi)\(psi'*y);
 
