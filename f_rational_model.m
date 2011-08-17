@@ -1,4 +1,7 @@
 function ret = f_rational_model(simul, model, yuser, y_init, u)
+%% DOC
+%
+%%
 
 f_check_model(model);
 if simul.N ~= size(yuser,1)
