@@ -28,16 +28,25 @@ for i=max(abs(m.regr))+1:N
         end
         
         if m.yu(j) == 1
-            yu=y(i-abs(m.regr(j)));
+            yu=y(i-abs(m.regr(j)))^m.texp(j);
         else
-            yu=u(i-abs(m.regr(j)));
+            yu=u(i-abs(m.regr(j)))^m.texp(j);
+        end
+        % non linearity is yu^a*y^b
+        yu2=1;
+        if m.yplus_uy(j) == 1
+            yu2=y(i-abs(m.yplus_regr(j)))^m.yplus_exp(j);
+        end
+        % non linearity is yu^a*u^b
+        if m.yplus_uy(j) == 2
+            yu2=u(i-abs(m.yplus_regr(j)))^m.yplus_exp(j);
         end
         
         if j<=m.n_dim
-            psi(i,j)=yu^m.texp(j);
+            psi(i,j)=yu*yu2;
         else
-            % here we should alway use y(i)
-            psi(i,j)=-yu^m.texp(j)*y(i);
+            % here we should alway use y(i) (equation 10.44 aguirre)
+            psi(i,j)=-yu*yu2*y(i);
         end
 
     end

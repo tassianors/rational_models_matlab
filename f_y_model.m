@@ -22,20 +22,36 @@ for k=max(abs(m.regr))+1:N
     num=0;
     for i=1:m.n_dim
         if m.yu(i) == 1
-            yu=y(k-abs(m.regr(i)));
+            yu=y(k-abs(m.regr(i)))^m.texp(i);
         else
-            yu=u(k-abs(m.regr(i)));
+            yu=u(k-abs(m.regr(i)))^m.texp(i);
         end
-        num=num+theta(i)*yu^m.texp(i);
+                % non linearity is yu^a*y^b
+        if m.yplus_uy(i) == 1
+            yu=yu*y(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
+        end
+        % non linearity is yu^a*u^b
+        if m.yplus_uy(i) == 2
+            yu=yu*u(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
+        end
+        num=num+theta(i)*yu;
     end
     den = 1;
     for i=m.n_dim+1:m.dim
         if m.yu(i) == 1
-            yu=y(k-abs(m.regr(i)));
+            yu=y(k-abs(m.regr(i)))^m.texp(i);
         else
-            yu=u(k-abs(m.regr(i)));
+            yu=u(k-abs(m.regr(i)))^m.texp(i);
         end
-        den=den+theta(i)*yu^m.texp(i);
+        % non linearity is yu^a*y^b
+        if m.yplus_uy(i) == 1
+            yu=yu*y(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
+        end
+        % non linearity is yu^a*u^b
+        if m.yplus_uy(i) == 2
+            yu=yu*u(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
+        end
+        den=den+theta(i)*yu;
     end
     y(k)= num/den;
 end

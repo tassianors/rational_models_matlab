@@ -7,6 +7,12 @@ model.dim     = 4;
 model.texp    = [2 1 1 3];
 model.yu      = [1 1 0 1];
 model.regr    = [1 2 1 2];
+% u = 2 y=1 none =0
+model.yplus_uy = [0 0 0 0];
+% tels the d param
+model.yplus_exp = [0 0 0 0];
+% tels the C param
+model.yplus_regr = [0 0 0 0];
 model.err_model   = 0;
 enable=true;
 %% Simulation parameters

@@ -21,9 +21,6 @@ hold;
 if realA ~= 0 && realB ~= 0
 	hold;
  	plot(realA, realB, 'kd');
-% 	hold;
-% 	hold
-% 	plot([realA realB], [ma mb])
 end
 title('Estimativa dos parametros do denominador')
 xlabel('Valor da estimativa para a variavel A')
