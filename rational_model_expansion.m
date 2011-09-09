@@ -34,7 +34,7 @@ u=ones(simul.N, 1);
 
 %% Simulation of real system
 for k=3:simul.N
-    y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1+b1*y(k-2)^3*(u(k-2)));
+    y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1+b1*y(k-2)^3*(u(k-1)));
 end
 
 %% Rational model - get the rational m_rat estimative
