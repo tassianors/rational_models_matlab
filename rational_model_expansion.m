@@ -1,8 +1,11 @@
 %% Model expansion
 close all; clear all;
 clc;
+P=path;
+path(P,'./functions')
+
 %% Real system - variables
-a1=.3; a2=-2; a3=1.5; b1=.2;
+a1=.3; a2=-.5; a3=1.5; b1=.2;
 
 %% model parameter definition
 % model example 
@@ -16,16 +19,16 @@ m_rat.yu      = [1 1 0 1];
 m_rat.regr    = [1 2 1 2];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % u = 2 y=1 none =0
-m_rat.yplus_uy = [0 0 0 2];
+m_rat.yplus_uy = [0 1 2 0];
 % tels the d param
-m_rat.yplus_exp = [0 0 0 1];
+m_rat.yplus_exp = [0 1 1 0];
 % tels the C param
-m_rat.yplus_regr = [0 0 0 1];
+m_rat.yplus_regr = [0 1 1 0];
 
 m_rat.err_m_rat   = 0;
 m_rat.err_enable = true
 %% Simulation parameters
-simul=struct('N', 200, 'nEstimates', 10, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
+simul=struct('N', 300, 'nEstimates', 50, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
 
 % initial conditions
 y=zeros(simul.N, 1);
@@ -34,9 +37,9 @@ u=ones(simul.N, 1);
 
 %% Simulation of real system
 for k=3:simul.N
-    y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1+b1*y(k-2)^3*(u(k-1)));
+    y(k)=(a1*y(k-1)^2+a2*y(k-2)*y(k-1)+a3*u(k-2)*u(k-1))/(1+b1*y(k-2)^3);
 end
-
+stem(y)
 %% Rational model - get the rational m_rat estimative
 ret = f_rational_model(simul, m_rat, y, [y(1) y(2)], u)
 f_draw_elipse(ret(:,1), ret(:,2), a1, a2);
