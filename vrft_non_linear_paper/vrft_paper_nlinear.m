@@ -5,12 +5,12 @@
 close all; clear all;
 clc;
 P=path;
-path(P,'./functions')
+path(P,'../functions')
 %========================================================================
 % init
 %========================================================================
 model.Ts=1;
-model.N=800;
+model.N=500;
 %model.dim=4;
 %model.regr = [1 0 1 2];
 %model.eul= [0 1 1 1];
@@ -73,9 +73,9 @@ m_rat.yplus_exp = [0 0 0];
 m_rat.yplus_regr = [0 0 0];
 
 m_rat.err_m_rat   = 0;
-m_rat.err_enable = false
+m_rat.err_enable = true
 %% Simulation parameters
-simul=struct('N', model.N, 'nEstimates', 10, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
+simul=struct('N', model.N, 'nEstimates', 50, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
 ret = f_rational_model(simul, m_rat, u, [u(1)], e)
 a1=1;
 a2=0.2;
