@@ -17,7 +17,7 @@ model.N=800;
 
 % input signal
 t = 0:1:model.N-1;
-u = (square(0.01*pi*t)');
+u = ones(model.N, 1)*.5; %(square(0.01*pi*t)');
 %========================================================================
 % real system
 %========================================================================
@@ -75,7 +75,7 @@ m_rat.yplus_regr = [0 0 0];
 m_rat.err_m_rat   = 0;
 m_rat.err_enable = false
 %% Simulation parameters
-simul=struct('N', model.N, 'nEstimates', 10, 'np', 10, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
+simul=struct('N', model.N, 'nEstimates', 10, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
 ret = f_rational_model(simul, m_rat, u, [u(1)], e)
 a1=1;
 a2=0.2;
