@@ -1,6 +1,6 @@
 %========================================================================
 % Exemplo do Paper de VRFT nao linear
-% real system: y(k)=0.9y(k-1)+tanh(u(t-1))
+% real system: y(k)=0.9y(k-1)^3+tanh(u(t-1))
 %========================================================================
 close all; clear all;
 clc;
@@ -10,14 +10,15 @@ path(P,'../functions')
 % init
 %========================================================================
 model.Ts=1;
-model.N=100;
+model.N=50;
 %model.dim=4;
 %model.regr = [1 0 1 2];
 %model.eul= [0 1 1 1];
 
 % input signal
 t = 0:1:model.N-1;
-u = ones(model.N, 1)*.5; %(square(0.01*pi*t)');
+u = ones(model.N, 1)*.1; %(square(0.01*pi*t)');
+% u = (square(0.01*pi*t)')*.1;
 %========================================================================
 % real system
 %========================================================================
@@ -25,7 +26,7 @@ y=zeros(model.N, 1);
 r_virt=zeros(model.N, 1);
 y(1)=0;
 for k=2:model.N
-   y(k)=0.9*y(k-1)+tanh(u(k-1)); 
+   y(k)=0.9*y(k-1)^3+tanh(u(k-1)); 
 end
 
 %========================================================================
@@ -75,10 +76,11 @@ m_rat.yplus_regr = [0 0 0];
 m_rat.err_m_rat   = 0;
 m_rat.err_enable = true
 %% Simulation parameters
-simul=struct('N', model.N, 'nEstimates', 10, 'np', 0.1, 'maxError', 0.001, 'l', 100, 'diffConv', .1);
+simul=struct('N', model.N, 'nEstimates', 15, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
 ret = f_rational_model(simul, m_rat, u, [u(1)], e)
-aux=zeros(simul.nEstimates ,1);
-aux(:,1)=ret(:,2)+ret(:,3);
-[ma sta mb stb]=f_draw_elipse(aux(:,1), -ret(:,3), 0, 0);
+aux=zeros(simul.nEstimates ,1)
+aux(:,1)=ret(:,2)+ret(:,3)
+f_draw_elipse(aux(:,1), -ret(:,3), 0, 0)
+
 
 

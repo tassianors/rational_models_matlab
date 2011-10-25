@@ -1,4 +1,4 @@
-function f_draw_elipse(vetA, vetB, realA, realB)
+function [ma stda mb stdb] = f_draw_elipse(vetA, vetB, realA, realB)
 %% Plots a elipse with 95% of confiability based on data in vetA and vetB
 % vetA:: data vector of variable A
 % vetB:: data vector of variable B
@@ -12,6 +12,9 @@ else
 end
 ma=mean(vetA);
 mb=mean(vetB);
+stda=std(vetA);
+stdb=std(vetB);
+
 
 % from here is only to plot the estimated points
 plot(vetA, vetB, 'bo');
@@ -22,7 +25,7 @@ if realA ~= 0 && realB ~= 0
 	hold;
  	plot(realA, realB, 'kd');
 end
-title('Estimativa dos parametros do denominador')
+title('Estimativa dos parametros')
 xlabel('Valor da estimativa para a variavel A')
 ylabel('Valor da estimativa para a variavel B')
 legend('Estimativas', 'Media', 'real')
