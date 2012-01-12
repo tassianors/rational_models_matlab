@@ -10,14 +10,15 @@ path(P,'../functions')
 % init
 %========================================================================
 model.Ts=1;
-model.N=100;
+model.N=400;
 %model.dim=4;
 %model.regr = [1 0 1 2];
 %model.eul= [0 1 1 1];
 
 % input signal
 t = 0:1:model.N-1;
-u = ones(model.N, 1)*.5; %(square(0.01*pi*t)');
+u =(square(0.01*pi*t)');
+%u = ones(model.N, 1)*1; %(square(0.01*pi*t)');
 %========================================================================
 % real system
 %========================================================================
@@ -75,7 +76,7 @@ m_rat.yplus_regr = [0 0 0];
 m_rat.err_m_rat   = 0;
 m_rat.err_enable = true
 %% Simulation parameters
-simul=struct('N', model.N, 'nEstimates', 10, 'np', 0.1, 'maxError', 0.001, 'l', 100, 'diffConv', .1);
+simul=struct('N', model.N, 'nEstimates', 100, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
 ret = f_rational_model(simul, m_rat, u, [u(1)], e)
 aux=zeros(simul.nEstimates ,1);
 aux(:,1)=ret(:,2)+ret(:,3);
