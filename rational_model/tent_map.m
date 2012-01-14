@@ -16,11 +16,11 @@ model.yplus_uy = [0 0 0 0 0];
 model.yplus_exp = [0 0 0 0 0];
 % tels the C param
 model.yplus_regr = [0 0 0 0 0];
-
 model.err_model   = 0;
 enable=true;
+
 %% Simulation parameters
-simul=struct('N', 200, 'nEstimates', 4, 'np', 0.5, 'maxError', 0.1, 'l', 100, 'diffConv', 100); 
+simul=struct('N', 300, 'nEstimates', 2, 'np', 0.5, 'maxError', 0.1, 'l', 100, 'diffConv', 100); 
 
 %% Real system - variables
 a=1.999; b=0.5;
@@ -36,16 +36,16 @@ for m=1:simul.nEstimates
 	
     model.err_model = 0;
     % Simulation of real system
-     for k=max(abs(model.regr))+1:simul.N
-         y(k)=1-a*abs(y(k-1)-b);
-     end
-%     y2 = f_aguirre_get_model_output(model, simul, expected, y(1))
-%     
-%     f_aguirre_plot_map(y, m)
-%     f_aguirre_plot_map(y2, m+1)
+%     for k=max(abs(model.regr))+1:simul.N
+%         y(k)=1-a*abs(y(k-1)-b);
+%     end
+    y2 = f_aguirre_get_model_output(model, simul, expected, y(1));
+    y = f_y_model(y(1), u, expected, model);
+    f_aguirre_plot_map(y, m)
+    f_aguirre_plot_map(y2, m+1)
 	% set randon noise
-	%y=y+y.*+rand(simul.N,1)*(mean(y)/200*simul.np);
-	
+	%y=f_get_wnoise(y, 1);
+	as
     psi = f_get_psi(y, yc, u, model);
     theta(1,:)=(psi'*psi)\(psi'*y);
 
@@ -68,7 +68,7 @@ for m=1:simul.nEstimates
         %% step 2 -  calc the variance
         v(l)=cov(y-yc);
 		if l > 1
-			v_diff = v(l)-v(l-1);
+			v_diff = abs(v(l)-v(l-1));
 		else
 			v_diff=v(l);
 		end
@@ -91,12 +91,12 @@ for m=1:simul.nEstimates
         ndb(m)=theta(l+1,5);
         l=l+1;
     end
-    theta
+    theta;
     delta;
     v';
 end %J
-result = f_aguirre_get_model_output(model, simul, theta(size(theta, 1),:), y(1));
+result = f_y_model(y(1), u, theta(size(theta, 1),:), model);
 f_aguirre_plot_map(result, m+1);
 
-f_draw_elipse(nna, nnb, expected(1), expected(2));
-f_draw_elipse(nda, ndb, expected(4), expected(5));
+% f_draw_elipse(nna, nnb, expected(1), expected(2));
+% f_draw_elipse(nda, ndb, expected(4), expected(5));
