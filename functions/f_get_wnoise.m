@@ -6,5 +6,5 @@ if max(size(y)) <= 1
 end
 noise_= rand(size(y, 1),size(y, 2));
 n_mean = mean(noise_);
-noise = y+y.*+(noise_-n_mean/2)*(mean(y)/200*np);
+noise = y+y.*+(noise_-n_mean)*(mean(y)/200*np);
 end
