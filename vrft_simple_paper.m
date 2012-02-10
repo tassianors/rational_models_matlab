@@ -4,6 +4,8 @@
 % tassianors@gmail.com
 %==========================================================================
 clear all; close all;clc;
+P=path;
+path(P,'../functions');
 
 % Sample time
 a=.6;
