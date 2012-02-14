@@ -3,7 +3,7 @@ close all; clear all;
 clc;
 P=path;
 path(P,'../functions')
-
+M=6;
 x=0.8;
 y=0.9;
 Ts=1;
@@ -14,8 +14,7 @@ Ts=1;
 
 %% Ideal Controler
 % C_0(z)=(0.4(z-0.9)(z-0.8))/(z(z-1))
-
-%y(t)=G_0(z)*u(t)+H_0(z)*e(t)
+% y(t)=G_0(z)*u(t)+H_0(z)*e(t)
 
 model.a = [1 -(x+y) x*y];
 model.b = [1 0];
@@ -26,18 +25,15 @@ model.md = [1 -0.6];
 model.TS = Ts;
 model.delay = tf([1],[1 0], model.TS);
 
-%N=250
-%u=ones(N, 1);
-%u=f_get_square_signal(N);
-[u N]=f_get_prbs(5);
-e=rand(N, 1)*0.01;
+[u N]=f_get_prbs(M);
 g=tf(model.b,model.a, model.TS);
 h=tf(model.d,model.c, model.TS);
+m=tf(model.mn,model.md, model.TS);
+
+e=f_get_noise_signal(N, 0.01);
 yu=lsim(g,u);
 ye=lsim(h,e);
-y=yu;%+ye;
-
-m=tf(model.mn,model.md, model.TS);
+y=yu+ye;
 
 minv=inv(m)*model.delay;
 r=lsim(minv, y);
@@ -53,6 +49,5 @@ mc.regr = [0 1 2 1];
 mc.dim = 4;
 mc.N = N;
 
-f_calc_mmq_theta(mc, u, el)
-plot(y)
-expect= [0.4 -0.68 -0.288 1]
+theta = f_calc_mmq_theta(mc, u, el)
+expect= [0.4 -0.68 0.288 1]
