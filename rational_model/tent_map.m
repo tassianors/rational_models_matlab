@@ -31,7 +31,7 @@ for m=1:simul.nEstimates
 	%% initialization variables
 	y=zeros(simul.N, 1);
 	yc=y;
-	u=ones(simul.N, 1);
+	u=f_get_square_signal(simul.N);
 	y(1)=0;
 	
     model.err_model = 0;
@@ -45,9 +45,19 @@ for m=1:simul.nEstimates
     f_aguirre_plot_map(y2, m+1)
 	% set randon noise
 	%y=f_get_wnoise(y, 1);
-	as
+	
     psi = f_get_psi(y, yc, u, model);
-    theta(1,:)=(psi'*psi)\(psi'*y);
+    z_iv = zeros(size(psi));
+    for t=6:simul.N
+        % auxiliary instrument z
+        z_iv(t, 5)=u(t-1);
+        z_iv(t, 4)=u(t-2);
+        z_iv(t, 3)=u(t-3);
+        z_iv(t, 2)=u(t-4);
+        z_iv(t, 1)=u(t-5);
+    end
+    theta(1,:)=(psi'*psi)\(psi'*y)
+    erer=(z_iv'*psi)\(z_iv'*y)
 
     %% here we got the first estimative, now we start the loop
     l=1;

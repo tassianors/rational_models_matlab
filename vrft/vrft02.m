@@ -1,4 +1,5 @@
-%% Very simple VRFT example
+%% tese luciola: modelo BJ
+
 close all; clear all;
 clc;
 P=path;
@@ -9,48 +10,51 @@ P=path;
 path(P,'../functions/plots')
 
 
-M=6;
-x=0.8;
+M=10;
+x=0.5;
 y=0.9;
+o=0.3
 Ts=1;
-exper = 10;
-%% ARX system: 
-% G_0(z)=z/((z-x)(z-y))
-% H_0(z)=z^2/((z-0.9)(z-0.8))
+exper = 100;
+%% BJ system: 
+% G_0(z)=x/(z-y)
+% H_0(z)=z/(z-0.3)
+
 % M(z)=0.4/(z-0.6)
 
 %% Ideal Controler
-% C_0(z)=(0.4(z-0.9)(z-0.8))/(z(z-1))
+% C_0(z)=(0.8(z-0.9))/(z-1)
 % y(t)=G_0(z)*u(t)+H_0(z)*e(t)
 
-model.a = [1 -(x+y) x*y];
-model.b = [1 0];
-model.c = [1 -(x+y) x*y];
-model.d = [1 0 0];
+% den of G
+model.a = [1 -y];
+% num of G
+model.b = [x];
+model.c = [1 -o];
+model.d = [1 0];
 model.mn = [0.4];
 model.md = [1 -0.6];
 model.TS = Ts;
 model.delay = 1;
 model.delay_func = tf([1],[1 0], model.TS);
-model.noise_std = 0.001;
+model.noise_std = 0.002;
 
-theta = zeros(exper, 4);
-[u N]=f_get_prbs(M)
+theta = zeros(exper, 3);
+[u N]=f_get_prbs(M);
 for i = 1: exper
 
     el=f_get_vrft_el(model, u);
-ddd
     %% Controller model
-    % u(t)=0.4e(t)-0.68e(t-1)-0.288e(t-2)+u(t-1)
-    mc.eul = [1 1 1 0];
-    mc.regr = [0 1 2 1];
-    mc.dim = 4;
+    % u(t)=u(t-1)+0.8e(t)-0.72e(t-1)
+    mc.eul = [0 1 1];
+    mc.regr = [1 0 1];
+    mc.dim = 3;
     mc.N = N;
 
     theta(i,:) = f_calc_mmq_theta(mc, u, el);
 end
 
-expect= [0.4 -0.68 0.288 1];
+expect= [1 0.8 -0.72];
 
 f_draw_elipse(theta(:,1), theta(:,2), expect(1), expect(2));
-f_draw_elipse(theta(:,3), theta(:,4), expect(3), expect(4));
+%f_draw_elipse(theta(:,3), theta(:,4), expect(3), expect(4));
