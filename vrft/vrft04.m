@@ -9,14 +9,16 @@ path(P,'../functions/signal')
 P=path;
 path(P,'../functions/plots')
 
-M=5;
+% simulation parameters
+rho_size=2;
+M=10;
 a=0.5;
 b=0.9;
 c=0.3;
 
 Ts=1;
 exper = 100;
-cut=127*2+1;
+cut=1;
 
 %% BL system: 
 % G_0(z)=a/(z-b)
@@ -38,11 +40,10 @@ model.delay = 1;
 model.delay_func = tf([1],[1 0], model.TS);
 model.noise_std = 0.005;
 
-theta = zeros(exper, 2);
+theta = zeros(exper, rho_size);
 [u N]=f_get_prbs(M);
 
 beta=[tf([1 0],[1 -1], model.TS); tf([1],[1 -1], model.TS)];
-
 for i = 1: exper
     [el y] = f_get_vrft_el(model, u);
     phy2=lsim(beta, el);
@@ -53,3 +54,11 @@ end
 var(theta)
 expect= [0.8 -0.72];
 f_draw_elipse(theta(:,1), theta(:,2), expect(1), expect(2));
+
+C=tf(theta(1,:),[1 -1], model.TS);
+Jvr=f_get_vrft_Jvr(C, el, u)
+
+
+
+
+

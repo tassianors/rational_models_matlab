@@ -8,13 +8,14 @@ path(P,'../functions/signal')
 P=path;
 path(P,'../functions/plots')
 
+rho_size=3;
 
 M=10;
 x=0.8;
 y=0.9;
 Ts=1;
-exper = 10;
-cut=150;
+exper = 100;
+cut=1
 %% ARX system: 
 % G_0(z)=z/((z-x)(z-y))
 % H_0(z)=z^2/((z-0.9)(z-0.8))
@@ -33,27 +34,30 @@ model.md = [1 -0.6];
 model.TS = Ts;
 model.delay = 1;
 model.delay_func = tf([1],[1 0], model.TS);
-model.noise_std = 0.001;
+model.noise_std = 0.01;
 
-theta = zeros(exper, 3);
+theta = zeros(exper, rho_size);
 [u N]=f_get_prbs(M);
 
-fil= tf([1],[0.6 0], model.TS)
+C_den=[1 -1 0];
+beta=[tf([1 0 0], C_den, model.TS); tf([1 0],C_den , model.TS);tf([1],C_den , model.TS)];
 
 for i = 1: exper
     [el y]=f_get_vrft_el(model, u);
-    y2=lsim(fil,y);
-    %% Controller model
-    % u(t)=0.4e(t)-0.68e(t-1)-0.288e(t-2)
-    mc.eul = [1 1 1];
-    mc.regr = [0 1 2];
-    mc.dim = 3;
-    mc.N = N-cut;
-
-    theta(i,:) = f_calc_mmq_theta(mc, u(cut:max(size(u))), y2(cut:max(size(y2))));
+    phy2=lsim(beta, el);
+    phy=phy2(cut:max(size(phy2)),:,1);
+    theta(i,:)=inv(phy'*phy)*phy'*u(cut:max(size(u)));
 end
 
 expect= [0.4 -0.68 0.288];
-theta
+
+%f_draw_elipse3d(theta(:,1), theta(:,2), theta(:,3), expect(1), expect(2), expect(3));
 f_draw_elipse(theta(:,1), theta(:,2), expect(1), expect(2));
-%f_draw_elipse(theta(:,3), theta(:,4), expect(3), expect(4));
+f_draw_elipse(theta(:,1), theta(:,3), expect(1), expect(3));
+
+C=tf(theta(1,:),C_den, model.TS);
+Cd=tf(expect,C_den, model.TS);
+
+Jvr=f_get_vrft_Jvr(C, el, u)
+
+%f_plot_feedback_comp(tf(model.b,model.a, model.TS), C, Cd);
