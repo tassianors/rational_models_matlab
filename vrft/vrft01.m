@@ -9,11 +9,11 @@ P=path;
 path(P,'../functions/plots')
 
 
-M=6;
+M=10;
 x=0.8;
 y=0.9;
 Ts=1;
-exper = 10;
+exper = 100;
 %% ARX system: 
 % G_0(z)=z/((z-x)(z-y))
 % H_0(z)=z^2/((z-0.9)(z-0.8))
@@ -35,11 +35,10 @@ model.delay_func = tf([1],[1 0], model.TS);
 model.noise_std = 0.001;
 
 theta = zeros(exper, 4);
-[u N]=f_get_prbs(M)
+[u N]=f_get_prbs(M);
 for i = 1: exper
 
     el=f_get_vrft_el(model, u);
-ddd
     %% Controller model
     % u(t)=0.4e(t)-0.68e(t-1)-0.288e(t-2)+u(t-1)
     mc.eul = [1 1 1 0];

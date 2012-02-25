@@ -1,4 +1,4 @@
-function el = f_get_vrft_el(model, u)
+function [el y] = f_get_vrft_el(model, u)
 
 g=tf(model.b,model.a, model.TS);
 h=tf(model.d,model.c, model.TS);
