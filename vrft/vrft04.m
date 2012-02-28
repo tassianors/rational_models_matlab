@@ -18,7 +18,7 @@ c=0.3;
 
 Ts=1;
 exper = 100;
-cut=1;
+cut=10;
 
 %% BL system: 
 % G_0(z)=a/(z-b)

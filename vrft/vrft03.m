@@ -1,4 +1,5 @@
 %% Very simple VRFT example
+% PID controller in a ARX system
 close all; clear all;
 clc;
 P=path;
