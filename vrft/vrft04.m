@@ -13,12 +13,12 @@ path(P,'../functions/plots')
 rho_size=2;
 M=10;
 a=0.5;
-b=0.9;
-c=0.3;
+b=0.85;
+c=0.4;
 
 Ts=1;
 exper = 100;
-cut=10;
+cut=1;
 
 %% BL system: 
 % G_0(z)=a/(z-b)
@@ -42,7 +42,7 @@ model.noise_std = 0.005;
 
 theta = zeros(exper, rho_size);
 [u N]=f_get_prbs(M);
-
+    
 beta=[tf([1 0],[1 -1], model.TS); tf([1],[1 -1], model.TS)];
 for i = 1: exper
     [el y] = f_get_vrft_el(model, u);
@@ -51,12 +51,13 @@ for i = 1: exper
     theta(i,:)=inv(phy'*phy)*phy'*u(cut:max(size(u)));
 end
 
-var(theta)
-expect= [0.8 -0.72];
+variance =var(theta);
+expect= [0.8 -0.68];
 f_draw_elipse(theta(:,1), theta(:,2), expect(1), expect(2));
 
 C=tf(theta(1,:),[1 -1], model.TS);
 Jvr=f_get_vrft_Jvr(C, el, u)
+variance
 
 
 

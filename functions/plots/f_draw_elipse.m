@@ -3,6 +3,11 @@ function [ma stda mb stdb] = f_draw_elipse(vetA, vetB, realA, realB)
 % vetA:: data vector of variable A
 % vetB:: data vector of variable B
 %%
+if max(size(vetA)) <= 1 || max(size(vetB)) <= 1
+    warning('To plot something you must pass some array, not just a value ;)');
+    return
+end
+        
 figure;
 [N, M]=size(vetA);
 if M > N
@@ -19,15 +24,15 @@ stdb=std(vetB);
 % from here is only to plot the estimated points
 plot(vetA, vetB, 'bo');
 hold;
-plot(ma, mb, 'rx');
+plot(ma, mb, 'kp');
 hold;
 if realA ~= 0 && realB ~= 0
 	hold;
- 	plot(realA, realB, 'kd');
+    plot(realA, realB, 'ks');
 end
-title('Estimativa dos parametros')
-xlabel('Valor da estimativa para a variavel A')
-ylabel('Valor da estimativa para a variavel B')
+title('Estimativa dos parametros para o sistema BJ')
+xlabel('Valor da estimativa para a variavel Rho 1')
+ylabel('Valor da estimativa para a variavel Rho 2')
 legend('Estimativas', 'Media', 'real')
 
 % chi^2 for 95% of confiability

@@ -3,17 +3,23 @@ function [el y] = f_get_vrft_el(model, u)
 g=tf(model.b,model.a, model.TS);
 h=tf(model.d,model.c, model.TS);
 m=tf(model.mn,model.md, model.TS);
-N=max(size(u));
+N_orig=max(size(u));
 
-e=f_get_noise_signal(N, model.noise_std);
-yu=lsim(g,u);
+%Auxiliary signal MUST be 'delay_size' bigger than original u
+Uaux=u;
+
+for k=N_orig+1:N_orig+model.delay
+    Uaux(k)=1;    
+end
+
+e=f_get_noise_signal(N_orig+model.delay, model.noise_std);
+yu=lsim(g,Uaux);
 ye=lsim(h,e);
 y=yu+ye;
 
 minv=inv(m)*model.delay_func;
 r=lsim(minv, y);
-rl=r(model.delay+1:size(r,1));
-rl(size(r,1))=0;
-el=rl-y;
-
+rl=r(model.delay+1:max(size(r)));
+%rl(max(size(r)))=0;
+el=rl-y(1:N_orig);
 end
