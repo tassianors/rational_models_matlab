@@ -52,9 +52,7 @@ end
 
 expect= [0.4 -0.68 0.288];
 
-%f_draw_elipse3d(theta(:,1), theta(:,2), theta(:,3), expect(1), expect(2), expect(3));
-f_draw_elipse(theta(:,1), theta(:,2), expect(1), expect(2));
-f_draw_elipse(theta(:,1), theta(:,3), expect(1), expect(3));
+f_draw_elipse3d(theta(:,1), theta(:,2), theta(:,3), expect(1), expect(2), expect(3));
 
 C=tf(theta(1,:),C_den, model.TS);
 Cd=tf(expect,C_den, model.TS);

@@ -7,7 +7,8 @@ if max(size(vetA)) <= 1 || max(size(vetB)) <= 1
     warning('To plot something you must pass some array, not just a value ;)');
     return
 end
-        
+
+mark_size=8
 figure;
 [N, M]=size(vetA);
 if M > N
@@ -24,15 +25,15 @@ stdb=std(vetB);
 % from here is only to plot the estimated points
 plot(vetA, vetB, 'bo');
 hold;
-plot(ma, mb, 'kp');
+plot(ma, mb, 'kp', 'MarkerSize',mark_size, 'MarkerFaceColor', 'k');
 hold;
 if realA ~= 0 && realB ~= 0
 	hold;
-    plot(realA, realB, 'ks');
+    plot(realA, realB, 'ks', 'MarkerSize',mark_size, 'MarkerFaceColor', 'k');
 end
-title('Estimativa dos parametros para o sistema BJ')
-xlabel('Valor da estimativa para a variavel Rho 1')
-ylabel('Valor da estimativa para a variavel Rho 2')
+title('Estimativa dos parametros para o sistema BJ', 'FontSize',11)
+xlabel('Valor da estimativa para a variavel \rho_1', 'FontSize',11)
+ylabel('Valor da estimativa para a variavel \rho_2', 'FontSize',11)
 legend('Estimativas', 'Media', 'real')
 
 % chi^2 for 95% of confiability

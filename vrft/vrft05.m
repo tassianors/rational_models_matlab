@@ -78,4 +78,4 @@ Cd=zpk([0 0.9 0.5],[1 0.36 0.7],0.8, model.TS)
 Td=feedback(Cd*G, 1);
 
 step(T, TL, Td)
-f_draw_elipse(theta(:,1), theta(:,2), expect(1), expect(2));
+f_draw_elipse3d(theta(:,1), theta(:,2), theta(:,3), expect(1), expect(2), expect(3));
