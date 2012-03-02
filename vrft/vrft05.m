@@ -2,6 +2,11 @@
 % example of luciola thesys page 92 
 % where the controller function isn't inside controller class
 
+
+
+%comparar o bode dos 3..
+%pegar a  media de theta para cmprar os steps
+
 close all; clear all;
 clc;
 P=path;
@@ -68,14 +73,22 @@ expect= [1.1268   -0.7204   -0.3448];
 
 G=tf(model.b,model.a, model.TS);
 
-CL=tf(theta(1,:),[1 -1 0], model.TS);
+CL=tf(mean(theta),[1 -1 0], model.TS);
 TL=feedback(CL*G, 1);
 
-C=tf([1.1237 -0.7222 -0.3447],[1 -1 0], model.TS);
+JvrCL=f_get_vrft_Jvr(CL, el, u)
+
+C=tf(expect,[1 -1 0], model.TS);
 T=feedback(C*G, 1);
+
+JvrC=f_get_vrft_Jvr(C, el, u)
 
 Cd=zpk([0 0.9 0.5],[1 0.36 0.7],0.8, model.TS)
 Td=feedback(Cd*G, 1);
 
 step(T, TL, Td)
-f_draw_elipse3d(theta(:,1), theta(:,2), theta(:,3), expect(1), expect(2), expect(3));
+%f_draw_elipse3d(theta(:,1), theta(:,2), theta(:,3), expect(1), expect(2), expect(3));
+
+bode(Cd, C, CL)
+legend;
+

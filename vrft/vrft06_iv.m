@@ -11,7 +11,7 @@ path(P,'../functions/plots')
 
 % simulation parameters
 rho_size=2;
-M=20;
+m=20;
 a=0.5;
 b=0.85;
 c=0.4;
@@ -38,18 +38,26 @@ model.md = [1 -0.6];
 model.TS = Ts;
 model.delay = 1;
 model.delay_func = tf([1],[1 0], model.TS);
-model.noise_std = 0.01;
+model.noise_std = 0.001;
+
+M=tf(model.mn,model.md, model.TS);
+L=(1-M)*M;
+beta=[tf([1 0],[1 -1], model.TS); tf([1],[1 -1], model.TS)];
+
+%Instrumental Variables
+IV=beta*L*(inv(M)-1);
 
 theta = zeros(exper, rho_size);
-[u N]=f_get_prbs(M);
-    
-beta=[tf([1 0],[1 -1], model.TS); tf([1],[1 -1], model.TS)];
+[u N]=f_get_prbs(m);
 for i = 1: exper
     [el y] = f_get_vrft_el(model, u);
-    phy2=lsim(beta, el);
+    [el2 y2] = f_get_vrft_el(model, u);
+    ul=lsim(L,u);
+    phy2=lsim(IV, y);
+    instr2=lsim(IV, y2);
     phy=phy2(cut:max(size(phy2)),:,1);
-    size(u(cut:max(size(u))))
-    theta(i,:)=inv(phy'*phy)*phy'*u(cut:max(size(u)));
+    instr=instr2(cut:max(size(instr2)),:,1);
+    theta(i,:)=inv(instr'*phy)*instr'*ul(cut:max(size(ul)));
 end
 
 variance =var(theta);
@@ -57,8 +65,10 @@ expect= [0.8 -0.68];
 f_draw_elipse(theta(:,1), theta(:,2), expect(1), expect(2));
 
 C=tf(mean(theta),[1 -1], model.TS);
+
 Jvr=f_get_vrft_Jvr(C, el, u)
 Jmr=f_get_vrft_Jmr(C, model)
+
 variance
 
 

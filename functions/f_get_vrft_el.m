@@ -1,4 +1,4 @@
-function [el y] = f_get_vrft_el(model, u)
+function [el yy] = f_get_vrft_el(model, u)
 
 g=tf(model.b,model.a, model.TS);
 h=tf(model.d,model.c, model.TS);
@@ -22,4 +22,5 @@ r=lsim(minv, y);
 rl=r(model.delay+1:max(size(r)));
 %rl(max(size(r)))=0;
 el=rl-y(1:N_orig);
+yy=y(1:N_orig);
 end
