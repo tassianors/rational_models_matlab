@@ -43,7 +43,7 @@ model.md = [1 -1.2 0.36];
 model.TS = Ts;
 model.delay = 1;
 model.delay_func = tf([1],[1 0], model.TS);
-model.noise_std = 0.05;
+model.noise_std = 0.1;
 C_den=[1 -1 0];
 
 M=tf(model.mn,model.md, model.TS);
@@ -54,7 +54,19 @@ beta=[tf([1 0 0], C_den, model.TS); tf([1 0],C_den , model.TS);tf([1],C_den , mo
 IV=beta*L*(inv(M)-1);
 
 theta = zeros(exper, rho_size);
+thetaL = zeros(exper, rho_size);
 [u N]=f_get_prbs(m);
+
+for i = 1: exper
+    [el y] = f_get_vrft_el(model, u);
+    [el2 y2] = f_get_vrft_el(model, u);
+    ul=lsim(L,u);
+    phy2=lsim(IV, y);
+    instr2=lsim(IV, y2);
+    phy=phy2(cut:max(size(phy2)),:,1);
+    instr=instr2(cut:max(size(instr2)),:,1);
+    thetaL(i,:)=inv(instr'*phy)*instr'*ul(cut:max(size(ul)));
+end
 
 for i = 1: exper
     [el y]=f_get_vrft_el(model, u);
@@ -64,24 +76,32 @@ for i = 1: exper
 end
 
 variance =var(theta);
+varianceL =var(thetaL);
+
 expect= [0.8091   -0.1666   -0.3358];
 
-CL=tf(expect,C_den, model.TS)
+% controller with no filter
 C=tf(mean(theta),C_den, model.TS)
+% controller with L filter and IV 
+CL=tf(mean(thetaL),C_den, model.TS)
+% optimal controller 
+Cd=zpk([0 0.9 0.5],[1 0.36 0.7],0.8, model.TS);
+
+% costs
 Jvr=f_get_vrft_Jvr(C, el, u)
 Jmr=f_get_vrft_Jmr(C, model)
-
 JvrL=f_get_vrft_Jvr(CL, el, u)
 JmrL=f_get_vrft_Jmr(CL, model)
 
 G=tf(model.b,model.a, model.TS);
-Cd=zpk([0 0.9 0.5],[1 0.36 0.7],0.8, model.TS);
-TL=feedback(CL*G, 1);
 T=feedback(C*G, 1);
+TL=feedback(CL*G, 1);
 
-step(M, T, TL)
-%f_draw_elipse3d(theta(:,1), theta(:,2), theta(:,3), expect(1), expect(2), expect(3));
+step(T, TL, M)
+legend;
+grid;
+
 figure
-bode(Cd, C, CL)
+bode(C, CL, Cd)
 legend;
 
