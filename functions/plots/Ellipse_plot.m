@@ -109,7 +109,7 @@ if strcmp(Type,'2D'),
     plot(C(1),C(2),'r*');
     axis equal, grid
 else
-    mesh(XX,YY,ZZ);
+    mesh(XX,YY,ZZ, zeros(size(XX)));
     axis equal
     hidden off
 end

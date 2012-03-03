@@ -38,7 +38,7 @@ model.md = [1 -0.6];
 model.TS = Ts;
 model.delay = 1;
 model.delay_func = tf([1],[1 0], model.TS);
-model.noise_std = 0.01;
+model.noise_std = 0.001;
 
 theta = zeros(exper, rho_size);
 [u N]=f_get_prbs(M);
