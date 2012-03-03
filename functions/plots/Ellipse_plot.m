@@ -32,7 +32,7 @@ function Ellipse_plot(A, C, varargin)
 %  Updated: Feb 3, 2007
 
 %%%%%%%%%%%  start  %%%%%%%%%%%%%%%%%%%%%%%%%%%
-N = 20; % Default value for grid
+N = 15; % Default value for grid
 
 % See if the user wants a different value for N.
 %----------------------------------------------

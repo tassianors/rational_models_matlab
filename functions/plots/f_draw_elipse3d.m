@@ -3,10 +3,16 @@ function [ma stda mb stdb] = f_draw_elipse3d(vetA, vetB, vetC, realA, realB, rea
 % vetA:: data vector of variable A
 % vetB:: data vector of variable B
 %%
+if max(size(vetA)) <= 1 || max(size(vetB)) <= 1 || max(size(vetC)) <= 1
+    warning('To plot something you must pass some array, not just a value ;)');
+    return
+end
+
+mark_size=8
 figure;
 [N, M]=size(vetA);
 if M > N
-    PN=[vetA', vetB', vetB'];
+    PN=[vetA', vetB', vetC'];
 else
 	PN=[vetA, vetB, vetC];
 end
@@ -21,17 +27,22 @@ stdc=std(vetC);
 % from here is only to plot the estimated points
 plot3(vetA, vetB, vetC, 'bo');
 hold on;
-plot3(ma, mb, mc, 'rx');
-%if realA ~= 0 && realB ~= 0
-%	hold;
-% 	plot(realA, realB, 'kd');
-%end
-title('Estimativa dos parametros para o sistema ARX')
-xlabel('Estimativa Rho 1')
-ylabel('Estimativa Rho 2')
-zlabel('Estimativa Rho 3')
-legend('Estimativas', 'Media', 'Real')
-Ellipse_plot(inv(cov(PN))/7.81,mean(PN)')
+plot3(ma, mb, mc, 'kp', 'MarkerSize',mark_size, 'MarkerFaceColor', 'k');
+
+if realA ~= 0 && realB ~= 0 && realC ~= 0 
+    plot3(realA, realB, realC, 'ks', 'MarkerSize',mark_size, 'MarkerFaceColor', 'k');
+end
+
+title('Estimativa dos parametros para o sistema ARX', 'FontSize',11);
+xlabel('\rho_1', 'FontSize',11);
+ylabel('\rho_2', 'FontSize',11);
+zlabel('\rho_3', 'FontSize',11);
+legend('Estimativas', 'Media', 'Real');
+
+% chi^2 for 95% of confiability
+chi = 5.991;
+
+Ellipse_plot(inv(cov(PN))/chi,mean(PN)')
 hold off
 grid;
 end
