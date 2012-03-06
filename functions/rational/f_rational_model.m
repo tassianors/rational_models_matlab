@@ -38,10 +38,11 @@ for m=1:simul.nEstimates
         
         %% step 2 -  calc the variance
         v(l)=cov(y-yc);
-        if l > 1
-            v_diff = v(l)-v(l-1);
-        else
-            v_diff = v(l);
+        % check if variance is converging
+		if l > 1
+			v_diff = abs(v(l)-v(l-1));
+		else
+			v_diff=v(l);
         end
         
         psi = f_get_psi(y, yc, u, model);
