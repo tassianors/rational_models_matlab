@@ -13,12 +13,12 @@ P=path;
 path(P,'../functions/rational')
 
 % simulation parameters
-rho_size=5;
+rho_size=11;
 cut=1;
 m=1;
 
 % static non linearity
-b1=0.62;b3=-.95;
+b1=1.5;b3=0.5;
 ga1=0.5;
 gb1=0.9;
 
@@ -46,7 +46,7 @@ theta = zeros(exper, rho_size);
 y2=lsim(G,u);
 %% apply non linearity
 for k=2:N
-    y(k)=1/(b1*y2(k)+b3*y2(k)^3);
+    y(k)=1*(b1*y2(k)+b3*y2(k)^3);
 end
 
 if max(y) > 10000
@@ -60,19 +60,19 @@ end
 % model example 
 %y(k) = (y(k-a1)^b1)*(y(k-c1)^d1)+...+(y(k-an)^bn)*(y(k-cn)^dn)+(y(k-ua1)^ub1)*(u(k-uc1)^ud1)+...+(y(k-uan)^ubn)*(u(k-ucn)^udn)
 %       1+(y(k-an1)^bn1)*(y(k-cn1)^dn1)+...+(y(k-am)^bm)*(y(k-cm)^dm)+(y(k-ua1)^ub1)*(u(k-uc1)^ud1)+...+(y(k-uan)^ubn)*(u(k-ucn)^udn)
-m_rat.n_dim   = 5;
-m_rat.dim     = 5;
+m_rat.n_dim   = 11;
+m_rat.dim     = 11;
 % to indo do
-m_rat.texp    = [1 3 1 3 1];
-m_rat.yu      = [0 0 0 0 1];
-m_rat.regr    = [0 0 1 1 1];
+m_rat.texp    = [1 1 2 3 4 5 1 2 3 4 5];
+m_rat.yu      = [1 0 0 0 0 0 0 0 0 0 0];
+m_rat.regr    = [1 0 0 0 0 0 1 1 1 1 1];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % u = 2 y=1 none =0
-m_rat.yplus_uy = [0 0 0 0 0];
+m_rat.yplus_uy = [0 0 0 0 0 0 0 0 0 0 0];
 % tels the d param
-m_rat.yplus_exp = [0 0 0 0 0];
+m_rat.yplus_exp = [0 0 0 0 0 0 0 0 0 0 0];
 % tels the C param
-m_rat.yplus_regr = [0 0 0 0 0];
+m_rat.yplus_regr = [0 0 0 0 0 0 0 0 0 0 0];
 
 m_rat.err_m_rat   = 0;
 m_rat.err_enable = true
@@ -94,39 +94,11 @@ u=zeros(1,N);
 u_hat=zeros(1,N);
 for k=2:N
     e(k)=r(k)-y(k-1);
-    u(k)=theta(1)*e(k)+theta(2)*e(k)^3+theta(3)*e(k-1)+theta(4)*e(k-1)^3+theta(5)*u(k-1);
+    u(k)=theta(1)*u(k-1)+theta(2)*e(k)+theta(3)*e(k)^2+theta(4)*e(k)^3+theta(5)*e(k)^4+theta(6)*e(k)^5+theta(7)*e(k-1)+theta(8)*e(k-1)^2+theta(9)*e(k-1)^3+theta(10)*e(k-1)^4+theta(11)*e(k-1)^5;
     u_hat(k+1)=gb1*u_hat(k)+ga1*u(k);
     y(k)=(b1*u_hat(k+1)+b3*u_hat(k)^3);
 end
 C=tf([0.8 -0.72],[1 -1],1)
 stairs(y(2:N))
-%hold;
-%step(feedback(G*C,1))
-
-jhg
-[e y] = f_get_vrft_el(model, u);
-
-
-variance =var(theta);
-cda=0.8; cdb=0.9; cdc=0.5; cdd=1; cde=0.36; cdf=0.7;
-expect=[cda -cda*(cdb+cdc) cda*cdb*cdc (cdd+cde+cdf) -(cdd*cde+cdd*cdf+cde*cdf) cdd*cde*cdf];
-ret=mean(theta);
-% controller with no filter
-C=tf([ret(1) ret(2) ret(3) 0], [1 -ret(4) -ret(5) -ret(6)], model.TS);
-% optimal controller 
-Cd=zpk([0 cdb cdc],[cdd cde cdf],cda, 1);
-
-% costs
-Jvr=f_get_vrft_Jvr(C, e, u)
-Jmr=f_get_vrft_Jmr(C, model)
-
-G=tf(model.b,model.a, model.TS);
-T=feedback(C*G, 1);
-step(T, M)
-legend;
-grid;
-
-figure
-bode(C, Cd)
-legend;
-
+hold;
+step(feedback(G*C,1))
