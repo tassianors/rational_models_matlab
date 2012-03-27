@@ -84,7 +84,7 @@ simul=struct('N', N-1, 'nEstimates', exper, 'np', model.noise_std, 'maxError', 0
 %========================================================================
 for i = 1: exper
     [e y1] = f_get_vrft_e_nl(model, u, y');
-    theta = f_rational_model(simul, m_rat, u(1:max(size(u))-1), [u(1)], e)
+    theta = f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-1), e, 0, 0);
 end
 
 r=ones(1,N);

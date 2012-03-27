@@ -38,6 +38,6 @@ simul=struct('N', N, 'nEstimates', 5, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'di
 expected=[a -a*(b+c) a*b*c (d+e+f) -(d*e+d*f+e*f) d*e*f];
 
 %% Rational model - get the rational m_rat estimative
-ret = f_rational_model(simul, m_rat, y, [y(1)], zeros(size(y)), u')
+ret = f_rational_model(simul, m_rat, [y(1)], y, zeros(size(y)), u', 0,0)
 f_draw_elipse(ret(:,1), ret(:,2), a, a2);
 f_draw_elipse(ret(:,3), ret(:,4), a3, b1);

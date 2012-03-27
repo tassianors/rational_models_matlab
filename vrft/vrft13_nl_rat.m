@@ -84,7 +84,7 @@ simul=struct('N', N-1, 'nEstimates', exper, 'np', model.noise_std, 'maxError', 0
 for i = 1: exper
     [e yl rl] = f_get_vrft_e_nl(model, u, y);
     ul=lsim(L,u);
-    theta = f_rational_model(simul, m_rat, u(1:max(size(u))-1), [u(1)], e, y(1:max(size(y))-1), rl)
+    theta = f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-1), e, y(1:max(size(y))-1), rl)
 end
 ee=e;
 yy=yl;

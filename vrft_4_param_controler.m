@@ -56,7 +56,7 @@ yt=zeros(size(y));
 yt(2:size(y,1))=y(1:size(y,1)-1);
 
 %% Rational model - get the rational m_rat estimative
-ret = f_rational_model(simul, m_rat, yt, [y(1)], rl)
+ret = f_rational_model(simul, m_rat, [y(1)], yt, rl, 0, 0)
 c1=-a1/a3;
 c2=-a2/a3;
 c3=1/a3;

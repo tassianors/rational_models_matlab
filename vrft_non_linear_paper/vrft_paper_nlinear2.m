@@ -57,8 +57,6 @@ model.eul= [0 1 1 ];
 teta=f_calc_mmq_theta(model, u, e)
 
 
-%simul=struct('N', model.N, 'nEstimates', 10, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
-%ret=f_rational_model(simul, model, u, [u(1)], e)
 m_rat.n_dim   = 3;
 m_rat.dim     = 3;
 % to indo do

@@ -48,6 +48,6 @@ for k=3:simul.N
 end
 stem(y)
 %% Rational model - get the rational m_rat estimative
-ret = f_rational_model(simul, m_rat, y, [y(1) y(2)], u)
+ret = f_rational_model(simul, m_rat, [y(1) y(2)], y, u, 0, 0)
 f_draw_elipse(ret(:,1), ret(:,2), a1, a2);
 f_draw_elipse(ret(:,3), ret(:,4), a3, b1);

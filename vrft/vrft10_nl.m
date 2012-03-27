@@ -124,7 +124,7 @@ simul=struct('N', N, 'nEstimates', exper, 'np', model.noise_std, 'maxError', 0.0
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 [e y] = f_get_vrft_el(model, u);
-theta = f_rational_model(simul, m_rat, u, [u(1)], e);
+theta = f_rational_model(simul, m_rat, [u(1)], u, e, 0, 0);
 
 variance =var(theta);
 cda=0.8; cdb=0.9; cdc=0.5; cdd=1; cde=0.36; cdf=0.7;

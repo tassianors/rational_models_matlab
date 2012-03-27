@@ -1,4 +1,4 @@
-function ret = f_rational_model(simul, model, out_sig, ic, in_sig, aux_sig1, aux_sig2)
+function ret = f_rational_model(simul, model, ic, out_sig, in_sig, aux_sig1, aux_sig2)
 %% DOC
 %
 %%
