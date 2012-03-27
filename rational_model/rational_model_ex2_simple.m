@@ -8,7 +8,7 @@ a1=.3; a2=-2; a3=1.5; b1=.2;
 m_rat.n_dim   = 3;
 m_rat.dim     = 4;
 m_rat.texp    = [2 1 1 3];
-m_rat.yu      = [1 1 0 1];
+m_rat.yu      = [1 1 2 1];
 m_rat.regr    = [1 2 1 2];
 m_rat.err_m_rat   = 0;
 m_rat.err_enable = true;

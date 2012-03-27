@@ -5,10 +5,10 @@ clc;
 model.n_dim   = 3;
 model.dim     = 4;
 model.texp    = [2 1 1 3];
-model.yu      = [1 1 0 1];
+model.yu      = [1 1 2 1];
 model.regr    = [1 2 1 2];
 % u = 2 y=1 none =0
-model.yplus_uy = [0 0 0 0];
+model.yplus_yur = [0 0 0 0];
 % tels the d param
 model.yplus_exp = [0 0 0 0];
 % tels the C param
@@ -37,7 +37,7 @@ for m=1:simul.nEstimates
 	end
 	% set randon noise
     y=f_get_wnoise(y, simul.np);
-    psi = f_get_psi(y, yc, u, model);
+    psi = f_get_psi(y, yc, u, 0, model);
     theta(1,:)=(psi'*psi)\(psi'*y);
 
     %% here we got the first estimative, now we start the loop
@@ -46,7 +46,7 @@ for m=1:simul.nEstimates
     v_diff=simul.diffConv+1;
     % we can't have a precision bigger than the err_model power
    while ((max(abs(err)) > simul.maxError || abs(v_diff) > simul.diffConv) && l < simul.l)
-        yc=f_y_model([y(1) y(2)], u, theta(l,:), model);
+        yc=f_y_model([y(1) y(2)], u, 0, theta(l,:), model);
     
         % only after the first estimative, calc using the error model
         if l == 2 && enable == true
@@ -64,7 +64,7 @@ for m=1:simul.nEstimates
 			v_diff=v(l);
 		end
 
-        psi = f_get_psi(y, yc, u, model);
+        psi = f_get_psi(y, yc, u, 0, model);
         [PHY phy]=f_get_phy(y, model);
         
         theta(l+1,:)=(psi'*psi-v(l)*PHY)\ (psi'*y-v(l)*phy);

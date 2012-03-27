@@ -14,8 +14,8 @@ m_rat.yu      = [1 1 1 1];
 m_rat.regr    = [1 2 0 0];
 
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
-% u = 2 y=1 none =0
-m_rat.yplus_uy = [0 0 0 1];
+% r = 3 u = 2 y=1 none =0
+m_rat.yplus_yur = [0 0 0 1];
 % tels the d param
 m_rat.yplus_exp = [0 0 0 3];
 % tels the C param

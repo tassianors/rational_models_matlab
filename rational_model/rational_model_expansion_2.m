@@ -21,11 +21,11 @@ m_rat.n_dim   = 3;
 m_rat.dim     = 5;
 % to indo do
 m_rat.texp    = [1 1 1 2 2];
-m_rat.yu      = [1 1 0 1 1];
+m_rat.yu      = [1 1 2 1 1];
 m_rat.regr    = [1 1 1 1 2];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
-% u = 2 y=1 none =0
-m_rat.yplus_uy = [0 2 0 0 0];
+% r = 3 u = 2 y=1 none =0
+m_rat.yplus_yur = [0 2 0 0 0];
 % tels the d param
 m_rat.yplus_exp = [0 1 0 0 0];
 % tels the C param

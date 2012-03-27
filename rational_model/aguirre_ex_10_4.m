@@ -9,7 +9,7 @@ model.dim     = 5;
 model.texp    = [0 3 2 1 2];
 model.yu      = [1 1 1 1 1];
 model.regr    = [1 1 1 1 1];
-model.yplus_uy = [0 0 0 0 0];
+model.yplus_yur = [0 0 0 0 0];
 model.yplus_exp = [0 0 0 0 0];
 model.yplus_regr = [0 0 0 0 0];
 model.err_model   = 0;
@@ -45,7 +45,7 @@ for m=1:simul.nEstimates
 	% set randon noise
   	y=f_get_wnoise(y, 0.001);
 	
-    psi = f_get_psi(y, yc, u, model);
+    psi = f_get_psi(y, yc, u, 0, model);
     z_iv = zeros(size(psi));
     for t=6:simul.N
         % auxiliary instrument z
@@ -67,7 +67,7 @@ for m=1:simul.nEstimates
     v_diff=simul.diffConv+1;
     
     % here I got the result from the first estimative
-    yc=f_y_model(y(1), u, theta(l,:), model);
+    yc=f_y_model(y(1), u, 0, theta(l,:), model);
         
     % we can't have a precision bigger than the err_model power
     while ((max(abs(err)) > simul.maxError || abs(v_diff) > simul.diffConv) && l < simul.l)
@@ -92,7 +92,7 @@ for m=1:simul.nEstimates
         end
         
         % here I got the phy and Phy matrix
-        psi = f_get_psi(y, yc, u, model);
+        psi = f_get_psi(y, yc, u, 0, model);
         [PHY phy]=f_get_phy(y, model);
         
         % calculating the first aproximation (overwrite the first)
@@ -124,7 +124,7 @@ for m=1:simul.nEstimates
         nnc(m)=theta(l,3);
         nda(m)=theta(l,4);
         ndb(m)=theta(l,5);
-        yc=f_y_model(y(1), u, theta(l,:), model);
+        yc=f_y_model(y(1), u, 0, theta(l,:), model);
         l=l+1;
         
         
@@ -133,7 +133,7 @@ for m=1:simul.nEstimates
     delta;
     v';
 end %J
-result = f_y_model(y(1), u, theta(size(theta, 1),:), model);
+result = f_y_model(y(1), u, 0, theta(size(theta, 1),:), model);
 f_aguirre_plot_map(result, m+1);
 
 

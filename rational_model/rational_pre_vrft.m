@@ -13,11 +13,11 @@ m_rat.n_dim   = 6;
 m_rat.dim     = 6;
 % to indo do
 m_rat.texp    = [1 1 1 1 1 1];
-m_rat.yu      = [0 0 0 1 1 1];
+m_rat.yu      = [3 3 3 1 1 1];
 m_rat.regr    = [0 1 2 1 2 3];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
-% u = 2 y=1 none =0
-m_rat.yplus_uy =[0 0 0 0 0 0];
+% r =3 u = 2 y=1 none =0
+m_rat.yplus_yur =[0 0 0 0 0 0];
 % tels the d param
 m_rat.yplus_exp =[0 0 0 0 0 0];
 % tels the C param
@@ -38,6 +38,6 @@ simul=struct('N', N, 'nEstimates', 5, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'di
 expected=[a -a*(b+c) a*b*c (d+e+f) -(d*e+d*f+e*f) d*e*f];
 
 %% Rational model - get the rational m_rat estimative
-ret = f_rational_model(simul, m_rat, y, [y(1)], u')
-f_draw_elipse(ret(:,1), ret(:,2), a1, a2);
+ret = f_rational_model(simul, m_rat, y, [y(1)], zeros(size(y)), u')
+f_draw_elipse(ret(:,1), ret(:,2), a, a2);
 f_draw_elipse(ret(:,3), ret(:,4), a3, b1);

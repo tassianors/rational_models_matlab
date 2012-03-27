@@ -61,11 +61,11 @@ m_rat.n_dim   = 6;
 m_rat.dim     = 6;
 % to indo do
 m_rat.texp    = [1 1 1 1 1 1];
-m_rat.yu      = [0 0 0 1 1 1];
+m_rat.yu      = [2 2 2 1 1 1];
 m_rat.regr    = [0 1 2 1 2 3];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
-% u = 2 y=1 none =0
-m_rat.yplus_uy =[0 0 0 0 0 0];
+% r =3 u = 2 y=1 none =0
+m_rat.yplus_yur =[0 0 0 0 0 0];
 % tels the d param
 m_rat.yplus_exp =[0 0 0 0 0 0];
 % tels the C param
@@ -81,7 +81,7 @@ simul=struct('N', N, 'nEstimates', exper, 'np', model.noise_std, 'maxError', 0.0
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 [e y] = f_get_vrft_el(model, u);
-theta = f_rational_model(simul, m_rat, u, [u(1)], e);
+theta = f_rational_model(simul, m_rat, u, [u(1)], e, 0);
 
 variance =var(theta);
 cda=0.8; cdb=0.9; cdc=0.5; cdd=1; cde=0.36; cdf=0.7;

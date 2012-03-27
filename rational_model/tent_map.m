@@ -10,8 +10,8 @@ model.texp    = [0 2 1 1 2];
 model.yu      = [1 1 1 1 1];
 model.regr    = [1 1 1 1 1];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
-% u = 2 y=1 none =0
-model.yplus_uy = [0 0 0 0 0];
+% r = 0 u = 2 y=1 none =0
+model.yplus_yur = [0 0 0 0 0];
 % tels the d param
 model.yplus_exp = [0 0 0 0 0];
 % tels the C param
@@ -40,13 +40,13 @@ for m=1:simul.nEstimates
 %         y(k)=1-a*abs(y(k-1)-b);
 %     end
     y2 = f_aguirre_get_model_output(model, simul, expected, y(1));
-    y = f_y_model(y(1), u, expected, model);
+    y = f_y_model(y(1), u, 0, expected, model);
     f_aguirre_plot_map(y, m)
     f_aguirre_plot_map(y2, m+1)
 	% set randon noise
 	%y=f_get_wnoise(y, 1);
 	
-    psi = f_get_psi(y, yc, u, model);
+    psi = f_get_psi(y, yc, u, 0, model);
     z_iv = zeros(size(psi));
     for t=6:simul.N
         % auxiliary instrument z
@@ -65,7 +65,7 @@ for m=1:simul.nEstimates
     v_diff=simul.diffConv+1;
     % we can't have a precision bigger than the err_model power
     while ((max(abs(err)) > simul.maxError || abs(v_diff) > simul.diffConv) && l < simul.l)
-        yc=f_y_model(y(1) , u, theta(l,:), model);
+        yc=f_y_model(y(1) , u, 0, theta(l,:), model);
     
         % only after the first estimative, calc using the error model
         if l == 2 && enable == true
@@ -83,7 +83,7 @@ for m=1:simul.nEstimates
 			v_diff=v(l);
 		end
 
-        psi = f_get_psi(y, yc, u, model);
+        psi = f_get_psi(y, yc, u, 0, model);
         [PHY phy]=f_get_phy(y, model);
         
         theta(l+1,:)=(psi'*psi-v(l)*PHY)\ (psi'*y-v(l)*phy);
@@ -105,7 +105,7 @@ for m=1:simul.nEstimates
     delta;
     v';
 end %J
-result = f_y_model(y(1), u, theta(size(theta, 1),:), model);
+result = f_y_model(y(1), u, 0, theta(size(theta, 1),:), model);
 f_aguirre_plot_map(result, m+1);
 
 % f_draw_elipse(nna, nnb, expected(1), expected(2));

@@ -10,12 +10,12 @@ a1=.1; a2=-.5; a3=1; b1=.1;alpha=0.7;
 m_rat.n_dim   = 6;
 m_rat.dim     = 6;
 m_rat.texp    = [2 1 1 1 1 1];
-m_rat.yu      = [1 1 1 0 1 0];
+m_rat.yu      = [1 1 1 2 1 2];
 m_rat.regr    = [1 2 1 0 1 0];
 
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % u = 2 y=1 none =0
-m_rat.yplus_uy = [0 0 0 0 1 1];
+m_rat.yplus_yur = [0 0 0 0 1 1];
 % tels the d param
 m_rat.yplus_exp = [0 0 0 0 3 3];
 % tels the C param

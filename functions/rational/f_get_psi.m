@@ -1,4 +1,4 @@
-function psi = f_get_psi(y, yp, u, m)
+function psi = f_get_psi(y, yp, u, r, m)
 %% Gets the Psi based on the model structure
 % y:: output system data [y1,..,yn]
 % u:: innput system data [u1,..,un]
@@ -29,19 +29,25 @@ for i=max(abs(m.regr))+1:N
         
         if m.yu(j) == 1
             yu=y(i-abs(m.regr(j)))^m.texp(j);
-        else
+        elseif m.yu(j) == 2
             yu=u(i-abs(m.regr(j)))^m.texp(j);
+        elseif m.yu(j) == 3
+            yu=r(i-abs(m.regr(j)))^m.texp(j);
+        else
+            error('not supported option');
         end
         % non linearity is yu^a*y^b
         yu2=1;
-        if m.yplus_uy(j) == 1
+        if m.yplus_yur(j) == 1
             yu2=y(i-abs(m.yplus_regr(j)))^m.yplus_exp(j);
         end
         % non linearity is yu^a*u^b
-        if m.yplus_uy(j) == 2
+        if m.yplus_yur(j) == 2
             yu2=u(i-abs(m.yplus_regr(j)))^m.yplus_exp(j);
         end
-        
+        if m.yplus_yur(j) == 3
+            yu2=r(i-abs(m.yplus_regr(j)))^m.yplus_exp(j);
+        end
         if j<=m.n_dim
             psi(i,j)=yu*yu2;
         else
