@@ -7,7 +7,7 @@ function [phy phym] = f_get_phy(y, m)
 f_check_model(m);
 
 % initialization
-N=max(size(y,1));
+N=max(size(y));
 phy=zeros(m.dim+m.err_model,m.dim+m.err_model);
 phym=zeros(m.dim+m.err_model,1);
 

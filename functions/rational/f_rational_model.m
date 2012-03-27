@@ -1,10 +1,10 @@
-function ret = f_rational_model(simul, model, yuser, y_init, u, r)
+function ret = f_rational_model(simul, model, out_sig, ic, in_sig, aux_sig1, aux_sig2)
 %% DOC
 %
 %%
 
 f_check_model(model);
-if simul.N ~= size(yuser,1)
+if simul.N ~= size(out_sig,1)
     error('y must be a [1 N] array]');
 end
 ret=zeros(simul.nEstimates, model.dim);
@@ -16,8 +16,8 @@ for m=1:simul.nEstimates
     yc=y;
     model.err_model = 0;
     % set randon noise
-    y=f_get_wnoise(yuser, simul.np);
-    psi = f_get_psi(y, yc, u, r, model);
+    y=f_get_wnoise(out_sig, simul.np);
+    psi = f_get_psi(y, yc, in_sig, aux_sig1, aux_sig2, model);
     theta(1,:)=(psi'*psi)\(psi'*y);
     
     %% here we got the first estimative, now we start the loop
@@ -26,7 +26,7 @@ for m=1:simul.nEstimates
     v_diff=simul.diffConv+1;
     % we can't have a precision bigger than the err_model power
     while ((max(abs(err)) > simul.maxError || abs(v_diff) > simul.diffConv) && l < simul.l)
-        yc=f_y_model(y_init, u, r, theta(l,:), model);
+        yc=f_y_model(ic, in_sig, aux_sig1, aux_sig2, theta(l,:), model);
         
         % only after the first estimative, calc using the error model
         if l == 2 && model.err_enable == true
@@ -45,7 +45,7 @@ for m=1:simul.nEstimates
 			v_diff=v(l);
         end
         
-        psi = f_get_psi(y, yc, u, r, model);
+        psi = f_get_psi(y, yc, in_sig, aux_sig1, aux_sig2, model);
         [PHY phy]=f_get_phy(y, model);
         
         theta(l+1,:)=(psi'*psi-v(l)*PHY)\ (psi'*y-v(l)*phy);
