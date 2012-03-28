@@ -5,7 +5,7 @@
 %==========================================================================
 clear all; close all;clc;
 P=path;
-path(P,'./functions')
+path(P,'../functions')
 % Sample time
 alpha = 0.8;
 beta = 0.9;
