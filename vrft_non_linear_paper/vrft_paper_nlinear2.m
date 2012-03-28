@@ -71,7 +71,6 @@ m_rat.yplus_exp = [0 0 0];
 % tels the C param
 m_rat.yplus_regr = [0 0 0];
 
-m_rat.err_m_rat   = 0;
 m_rat.err_enable = true
 %% Simulation parameters
 simul=struct('N', model.N, 'nEstimates', 100, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
