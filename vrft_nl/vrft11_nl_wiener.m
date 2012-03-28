@@ -25,7 +25,7 @@ ga1=0.5;
 gb1=0.9;
 
 Ts=1;
-exper = 1;
+exper = 10;
 
 model.a = [1 -gb1]; 
 model.b = [ga1];
@@ -34,7 +34,7 @@ model.md = [1 -0.6];
 model.TS = Ts;
 model.delay = 1;
 model.delay_func = tf([1],[1 0], model.TS);
-model.noise_std = 0.0005;
+model.noise_std = 0;
 
 M=tf(model.mn,model.md, model.TS);
 G=tf(model.b,model.a, model.TS);
@@ -78,15 +78,17 @@ m_rat.yplus_regr = [0 0 0 0 0 0 0 0 0 0 0];
 
 m_rat.err_enable = true
 %% Simulation parameters
-simul=struct('N', N-1, 'nEstimates', exper, 'np', model.noise_std, 'maxError', 0.001, 'l', 100, 'diffConv', .1);
+simul=struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std, 'maxError', 0.001, 'l', 100, 'diffConv', .1);
 
 %========================================================================
 % vrft
 %========================================================================
 for i = 1: exper
     [e y1] = f_get_vrft_e_nl(model, u, y');
-    theta = f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-1), e, 0, 0);
+    theta(i,:)= f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-1), e, 0, 0);
 end
+
+mtheta=mean(theta);
 
 r=ones(1,N);
 y=zeros(1,N);
@@ -95,7 +97,7 @@ u=zeros(1,N);
 u_hat=zeros(1,N);
 for k=2:N
     e(k)=r(k)-y(k-1);
-    u(k)=theta(1)*u(k-1)+theta(2)*e(k)+theta(3)*e(k)^2+theta(4)*e(k)^3+theta(5)*e(k)^4+theta(6)*e(k)^5+theta(7)*e(k-1)+theta(8)*e(k-1)^2+theta(9)*e(k-1)^3+theta(10)*e(k-1)^4+theta(11)*e(k-1)^5;
+    u(k)=mtheta(1)*u(k-1)+mtheta(2)*e(k)+mtheta(3)*e(k)^2+mtheta(4)*e(k)^3+mtheta(5)*e(k)^4+mtheta(6)*e(k)^5+mtheta(7)*e(k-1)+mtheta(8)*e(k-1)^2+mtheta(9)*e(k-1)^3+mtheta(10)*e(k-1)^4+mtheta(11)*e(k-1)^5;
     u_hat(k+1)=gb1*u_hat(k)+ga1*u(k);
     y(k)=(b1*u_hat(k+1)+b3*u_hat(k)^3);
 end
