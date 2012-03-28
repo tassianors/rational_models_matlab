@@ -7,6 +7,8 @@ P=path;
 path(P,'../functions/signal')
 P=path;
 path(P,'../functions/plots')
+P=path;
+path(P,'../functions/vrft')
 
 
 M=10;

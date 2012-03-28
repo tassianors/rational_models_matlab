@@ -2,7 +2,15 @@
 close all; clear all;
 clc;
 P=path;
-path(P,'./functions')
+path(P,'../functions')
+P=path;
+path(P,'../functions/signal')
+P=path;
+path(P,'../functions/plots')
+P=path;
+path(P,'../functions/rational')
+P=path;
+path(P,'../functions/vrft')
 
 %% Real system - variables
 a=0.8; b=0.9; c=0.5; d=1; e=0.36; f=0.7;

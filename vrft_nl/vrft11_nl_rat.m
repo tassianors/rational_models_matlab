@@ -11,6 +11,8 @@ P=path;
 path(P,'../functions/plots')
 P=path;
 path(P,'../functions/rational')
+P=path;
+path(P,'../functions/vrft')
 
 % simulation parameters
 rho_size=11;

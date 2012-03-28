@@ -9,6 +9,7 @@ P=path;
 path(P,'../functions/plots')
 P=path;
 path(P,'../functions/rational')
+
 %% model parameter definition
 model.n_dim   = 3;
 model.dim     = 5;

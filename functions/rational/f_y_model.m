@@ -68,12 +68,12 @@ for k=max(abs(m.regr))+1:N
         end
         den=den+theta(i)*yu;
     end
-    err=0;
-    if max(size(theta)) > m.dim
-        for h=m.dim+1:max(size(theta))
-            err=err+aux_sig2(k)*theta(h);
-        end
-    end
+%    err=0;
+%    if max(size(theta)) > m.dim
+%        for h=m.dim+1:max(size(theta))
+%            err=err+aux_sig2(k)*theta(h);
+%        end
+%    end
     
     y(k)= num/den;
 end
