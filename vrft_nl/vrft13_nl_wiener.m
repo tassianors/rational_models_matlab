@@ -25,7 +25,7 @@ ga1=0.5;
 gb1=0.9;
 
 Ts=1;
-exper = 10;
+exper = 100;
 
 model.a = [1 -gb1]; 
 model.b = [ga1];
@@ -90,6 +90,8 @@ end
 
 mtheta=mean(theta)
 stdtheta=std(theta)
+vartheta=var(theta)
+covtheta=cov(theta)
 
 %========================================================================
 % Step simulation
