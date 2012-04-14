@@ -29,7 +29,7 @@ model.err_model   = 0;
 model.err_enable   = true;
 
 %% Simulation parameters
-simul=struct('N', 500, 'nEstimates', 1, 'np', 0, 'maxError', 0.1, 'l', 100, 'diffConv', 0.100); 
+simul=struct('N', 500, 'nEstimates', 1, 'np', 0, 'maxError', 0.01, 'l', 100, 'diffConv', 0.100); 
 
 %% Real system - variables
 a=1.999; b=0.5;
