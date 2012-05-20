@@ -142,9 +142,9 @@ end
 figure;
 plot(v(2:N), w(3:N+1))
 grid;
-xlabel('v(k)');
-ylabel('w(k)');
-title('v(k) x w(k)');
+xlabel('v(t)');
+ylabel('\omega(t)');
+title('v(t) \times \omega(t)');
 
 %========================================================================
 figure;
@@ -152,8 +152,8 @@ stairs(v(2:max(size(ploting))), 'r')
 hold;
 stairs(w(3:max(size(ploting))+1))
 grid;
-xlabel('k');
-title('v(k) and w(k) response to a step signal');
-legend('v(k)','w(k)');
+xlabel('t');
+title('Resposta de v(t) e \omega(t) a um sinal do tipo degrau');
+legend('v(t)','\omega(t)');
 
 
