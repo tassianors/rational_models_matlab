@@ -100,7 +100,7 @@ elseif strcmp(Type,'3D'),
     end
 end
 
-
+colormap(gray);
 % Plot the ellipse
 %----------------------------------------
 if strcmp(Type,'2D'),
