@@ -8,7 +8,7 @@ if max(size(vetA)) <= 1 || max(size(vetB)) <= 1 || max(size(vetC)) <= 1
     return
 end
 
-mark_size=8
+mark_size=8;
 figure;
 [N, M]=size(vetA);
 if M > N
@@ -34,9 +34,9 @@ if realA ~= 0 && realB ~= 0 && realC ~= 0
 end
 
 title('Estimativa dos parametros para o sistema ARX', 'FontSize',11);
-xlabel('\rho_1', 'FontSize',11);
-ylabel('\rho_2', 'FontSize',11);
-zlabel('\rho_3', 'FontSize',11);
+xlabel('\theta_1', 'FontSize',11);
+ylabel('\theta_2', 'FontSize',11);
+zlabel('\theta_3', 'FontSize',11);
 legend('Estimativas', 'Media', 'Real');
 
 % chi^2 for 95% of confiability

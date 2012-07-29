@@ -34,7 +34,7 @@ model.md = [1 -0.6];
 model.TS = Ts;
 model.delay = 1;
 model.delay_func = tf([1],[1 0], model.TS);
-model.noise_std = 0.05;
+model.noise_std = 0.005;
 
 M=tf(model.mn,model.md, model.TS);
 G=tf(model.b,model.a, model.TS);
@@ -56,22 +56,11 @@ end
 % Controller model definition
 %========================================================================
 %% model parameter definition
-% model example 
-%y(k) = (y(k-a1)^b1)*(y(k-c1)^d1)+...+(y(k-an)^bn)*(y(k-cn)^dn)+(y(k-ua1)^ub1)*(u(k-uc1)^ud1)+...+(y(k-uan)^ubn)*(u(k-ucn)^udn)
-%       1+(y(k-an1)^bn1)*(y(k-cn1)^dn1)+...+(y(k-am)^bm)*(y(k-cm)^dm)+(y(k-ua1)^ub1)*(u(k-uc1)^ud1)+...+(y(k-uan)^ubn)*(u(k-ucn)^udn)
 m_rat.n_dim   = rho_size;
 m_rat.dim     = rho_size;
-% to indo do
-for l=1:m_rat.dim
-    if l<=m_rat.dim/2
-        m_rat.texp(l)=l;
-        m_rat.regr(l)=0;
-    else
-        m_rat.texp(l)=l-m_rat.dim/2;
-        m_rat.regr(l)=1;
-    end
-end
-m_rat.yu      = ones(1,rho_size)*2;
+m_rat.texp    = [1 1 2 3 1 1 2 3];
+m_rat.regr    = [0 0 0 0 1 1 1 1];
+m_rat.yu      = [3 4 4 4 3 4 4 4];
 m_rat.yplus_yur = zeros(1,rho_size);
 m_rat.yplus_exp = zeros(1,rho_size);
 m_rat.yplus_regr = zeros(1,rho_size);
@@ -83,28 +72,23 @@ simul=struct('N', N-2, 'nEstimates', 1, 'np', model.noise_std, 'maxError', 0.001
 % vrft
 %========================================================================
 for i = 1: exper
-    [e y1] = f_get_vrft_e_nl(model, u, y');
+    [e y1 rl] = f_get_vrft_e_nl(model, u, y');
     el=lsim(Filter, e);
-    theta(i,:)= f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-2), el(2:max(size(e))), 0, 0);
-end
-
-mtheta=mean(theta);
-stdtheta=std(theta);
-vartheta=var(theta);
-covtheta=cov(theta);
-
-%========================================================================
-% cov matriz in latex format
-%========================================================================
-str = sprintf('average: %s & \t %s & \t %s & \t %s & \t %s & \t %s & \t %s & \t %s  \\\\ ',num2str(mtheta(1)),num2str(mtheta(2)),num2str(mtheta(3)),num2str(mtheta(4)),num2str(mtheta(5)),num2str(mtheta(6)),num2str(mtheta(7)),num2str(mtheta(8)));
-disp(str);
-
-for l=1:size(covtheta,1)
-    str = sprintf('%s & \t %s & \t %s & \t %s & \t %s & \t %s & \t %s & \t %s  \\\\ ',num2str(covtheta(l,1)),num2str(covtheta(l,2)),num2str(covtheta(l,3)),num2str(covtheta(l,4)),num2str(covtheta(l,5)),num2str(covtheta(l,6)),num2str(covtheta(l,7)),num2str(covtheta(l,8)));
-    disp(str);
+    %function ret = f_rational_model(simul, model, ic, out_sig, in_sig, aux_sig1, aux_sig2)
+    theta(i,:)= f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-2), el(2:max(size(e))), rl(2:max(size(e))), y);
 end
 
 
+mtheta=mean(theta)
+stdtheta=std(theta)
+vartheta=var(theta)
+covtheta=cov(theta)
+
+
+
+
+
+asas
 %========================================================================
 % Step simulation
 %========================================================================

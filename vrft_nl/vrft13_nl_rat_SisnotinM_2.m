@@ -31,7 +31,7 @@ model.md = [1 -(1-mn)];
 model.TS = Ts;
 model.delay = 1;
 model.delay_func = tf([1],[1 0], model.TS);
-model.noise_std = 0.1;
+model.noise_std = 0.05;
 
 M=tf(model.mn,model.md, model.TS);
 L=(1-M)*M;
@@ -52,35 +52,31 @@ end
 %========================================================================
 % Controller model definition
 %========================================================================
-
 %% model parameter definition
-% model example 
-%y(k) = (y(k-a1)^b1)*(y(k-c1)^d1)+...+(y(k-an)^bn)*(y(k-cn)^dn)+(y(k-ua1)^ub1)*(u(k-uc1)^ud1)+...+(y(k-uan)^ubn)*(u(k-ucn)^udn)
-%       1+(y(k-an1)^bn1)*(y(k-cn1)^dn1)+...+(y(k-am)^bm)*(y(k-cm)^dm)+(y(k-ua1)^ub1)*(u(k-uc1)^ud1)+...+(y(k-uan)^ubn)*(u(k-ucn)^udn)
 m_rat.n_dim   = 4;
 m_rat.dim     = 5;
 m_rat.err_model =0;
-% to indo do
-m_rat.texp    = [1 1 1 2 1];
+m_rat.texp    = [1 1 1 1 1];
 m_rat.yu      = [4 3 4 3 3];
 m_rat.regr    = [0 0 0 1 0];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % u = 2 y=1 none =0
 m_rat.yplus_yur = [0 0 3 3 0];
 % tels the d param
-m_rat.yplus_exp = [0 0 2 1 0];
+m_rat.yplus_exp = [0 0 1 1 0];
 % tels the C param
 m_rat.yplus_regr = [0 0 1 0 0];
 
 m_rat.err_enable = true
 m_rat.err_size = 1;
 %% Simulation parameters
-simul=struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
+simul=struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std, 'maxError', 0.1, 'l', 100, 'diffConv', .1);
 
 %========================================================================
 % vrft
 %========================================================================
-theta0=[mn/a2 (1-mn)/a2 mn*b1/a2 (1-mn)*b1/a2 a1/a2];
+%theta0=[mn/a2 (1-mn)/a2 mn*b1/a2 (1-mn)*b1/a2 a1/a2];
+theta0=zeros(1, rho_size);
 
 for i = 1:exper
     [e yl rl] = f_get_vrft_e_nl(model, u, y);
@@ -93,11 +89,6 @@ vartheta=var(theta)
 stdtheta=std(theta)
 covtheta=cov(theta)
 
-uc0=f_y_model([0], e, y, rl, theta0, m_rat);
-uc=f_y_model([0], e, y, rl, mean(theta), m_rat);
-
-Jvr_nl=f_get_vrft_nl_Jvr(uc0, uc)
-
 y=zeros(N, 1);
 r=ones(N, 1);
 e=zeros(N, 1);
@@ -105,7 +96,7 @@ u=zeros(N, 1);
 
 for k=3:N
     e(k)=r(k)-y(k-1);
-    u(k-1)=(mtheta(1)*r(k-1)+mtheta(2)*y(k-1)+mtheta(3)*y(k-2)^2*r(k-1)+mtheta(4)*y(k-2)^2*y(k-1))/(1+mtheta(5)*y(k-1));
+    u(k-1)=(mtheta(1)*r(k-1)^m_rat.texp(1)+mtheta(2)*y(k-1)^m_rat.texp(2)+mtheta(3)*y(k-2)^m_rat.texp(3)*r(k-1)^m_rat.yplus_yur(3)+mtheta(4)*y(k-2)^m_rat.texp(4)*y(k-1)^m_rat.yplus_yur(4))/(1+mtheta(5)*y(k-1)^m_rat.texp(5));
     y(k)=(a1*u(k-1)*y(k-1)+a2*u(k-1))/(1+b1*y(k-2)^2);
 end
 

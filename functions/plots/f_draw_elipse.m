@@ -8,8 +8,9 @@ if max(size(vetA)) <= 1 || max(size(vetB)) <= 1
     return
 end
 
-mark_size=8
+mark_size=8;
 figure;
+
 [N, M]=size(vetA);
 if M > N
 	PN=[vetA', vetB'];
@@ -32,8 +33,8 @@ if realA ~= 0 && realB ~= 0
     plot(realA, realB, 'ks', 'MarkerSize',mark_size, 'MarkerFaceColor', 'k');
 end
 title('Estimativa dos parametros para o sistema BJ', 'FontSize',11)
-xlabel('Valor da estimativa para a variavel \rho_1', 'FontSize',11)
-ylabel('Valor da estimativa para a variavel \rho_2', 'FontSize',11)
+xlabel('Estimativa \theta_1', 'FontSize',11)
+ylabel('Estimativa \theta_2', 'FontSize',11)
 legend('Estimativas', 'Media', 'real')
 
 % chi^2 for 95% of confiability
