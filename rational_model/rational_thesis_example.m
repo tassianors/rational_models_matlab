@@ -23,7 +23,7 @@ a1=.2;a2=0.1;a3=1;
 b1=1;b2=1
 
 Ts=1;
-exper = 10;
+exper = 100;
 theta = zeros(exper, rho_size);
 [u N]=f_get_prbs(m);
 
@@ -57,10 +57,14 @@ m_rat.yplus_regr = [0 1 0 0 0];
 
 m_rat.err_enable = true
 m_rat.err_size = 1;
+m_rat.noise_std = 0.005;
 %% Simulation parameters
-simul=struct('N', N, 'nEstimates', exper, 'np', 0.005, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
+simul=struct('N', N, 'nEstimates', 1, 'np', m_rat.noise_std, 'verbose', true, 'l', 100);
 
-theta = f_rational_model(simul, m_rat, [y(1)], y, u, 0, 0);
+for i = 1: exper
+    %theta(i,:)= -f_rational_model(simul, m_rat, [y(128)], y(128:N), u(128:N), 0, 0);
+    [theta(i,:) cost]= f_rational_model(simul, m_rat, [y(1)], y(1:N), u(1:N), 0, 0);
+end
 
 m_theta = mean(theta)
 v_theta = var(theta)

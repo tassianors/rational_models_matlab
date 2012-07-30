@@ -1,5 +1,8 @@
-function a = f_aguirre_plot_map(source, index)
-figure(index);
+function [x y] = f_aguirre_plot_map(source, index)
+if index ~= 0
+    figure(index);
+end
+
 m = max(size(source));
 for i = 1: m
    x(i) = source(i);
@@ -9,5 +12,7 @@ for i = 1: m
        y(i) = source(i);
    end
 end
-plot(x, y, 'b.');
+if index ~= 0
+    plot(x, y, 'b.');
+end
 end

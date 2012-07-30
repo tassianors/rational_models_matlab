@@ -29,7 +29,8 @@ model.err_model   = 0;
 model.err_enable   = true;
 
 %% Simulation parameters
-simul=struct('N', 500, 'nEstimates', 1, 'np', 0, 'maxError', 0.01, 'l', 100, 'diffConv', 0.100); 
+exper=10;
+simul=struct('N', 500, 'nEstimates', 1, 'np', 0.001, 'l', 100, 'verbose', true); 
 
 %% Real system - variables
 a=1.999; b=0.5;
@@ -41,13 +42,38 @@ for k=max(abs(model.regr))+1:simul.N
     y(k)=1-a*abs(y(k-1)-b);
 end
 
-f_aguirre_plot_map(y, 1)
 
-theta = f_rational_model(simul, model, [y(1)], y, zeros(size(y)), 0,0)
+for i = 1: exper
+    [theta(i,:) cost] = f_rational_model(simul, model, [y(1)], y, zeros(size(y)), 0,0);
+end
 
-y2=f_y_model([0], y, 0, 0, theta, model);
+m_theta = mean(theta)
+theta0
+c_theta = cov(theta)
+cost
+
+y2=f_y_model([0], y, 0, 0, m_theta, model);
 y3=f_y_model([0], y, 0, 0, theta0, model);
 
-f_aguirre_plot_map(y2, 2)
-f_aguirre_plot_map(y3, 3)
+[a b]=f_aguirre_plot_map(y2, 0);
+[c d]=f_aguirre_plot_map(y, 0);
+[e f]=f_aguirre_plot_map(y3, 0);
 
+
+plot(a, b, 'bo');
+hold;
+plot(c, d, 'g+');
+% Create xlabel
+xlabel({'t'});
+% Create ylabel
+ylabel({'t+1'});
+grid;
+figure(2);
+plot(a, b, 'bo');
+hold;
+plot(e, f, 'g+');
+% Create xlabel
+xlabel({'t'});
+% Create ylabel
+ylabel({'t+1'});
+grid;
