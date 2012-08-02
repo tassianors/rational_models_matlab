@@ -1,10 +1,13 @@
 function y = f_y_model(ic, in_sig, aux_sig1, aux_sig2, theta, m)
-%% Gets the y based on the model structure
-% ic:: Initial value for y, can be a array [y(1), y(2), ...]
-% in_sig:: input signal [u1,u2,u3,...]
-% theta:: estimative of parameters for the model
-% m:: model
-%%
+%%%%%%%%%%%%%%%%%%%%
+%% Get output signal based on model structure
+%
+% ic:: Initial value for y, can be an array [y(1), y(2), ...]
+% in_sig:: input signal array
+% theta:: estimative model parameters
+% m:: model structure
+%%%%%%%%%%%%%%%%%%%%
+
 N=max(size(in_sig));
 y=zeros(N, 1);
 % init the y array

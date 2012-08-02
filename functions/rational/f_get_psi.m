@@ -1,9 +1,9 @@
 function psi = f_get_psi(out_sig, out_prev, in_sig, aux_sig1, aux_sig2, m)
 %% Gets the Psi based on the model structure
 % out_sig:: output system data [y1,..,yn]
-% in_sig:: innput system data [u1,..,un]
-% aux_sig1:: innput system data [r1,..,rn]
-% aux_sig2:: innput system data [rr1,..,rrn]
+% in_sig:: input system data [u1,..,un]
+% aux_sig1:: input system data [r1,..,rn]
+% aux_sig2:: input system data [rr1,..,rrn]
 % m:: model
 %%
 
