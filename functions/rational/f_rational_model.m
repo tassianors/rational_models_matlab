@@ -1,5 +1,5 @@
 function [ret cost] = f_rational_model(simul, model, ic, out_sig, in_sig, aux_sig1, aux_sig2)
-%%%%%%%%%%%%%%%%%%%%
+%====================
 %% Function to perform the identification of a system using a recursive algorithm.
 %
 % simul :: Simulation parameter. Must have:
@@ -17,7 +17,7 @@ function [ret cost] = f_rational_model(simul, model, ic, out_sig, in_sig, aux_si
 % in_sig  :: Input signal of system under identification
 % aux_sig1 :: Auxiliary signal one that can be used or not in identification procedure
 % aux_sig2 :: Auxiliary signal two that can be used or not in identification procedure
-%%%%%%%%%%%%%%%%%%%%
+%====================
 
 % start time measurement (used to know how much time has been spend in this procedure)
 tic

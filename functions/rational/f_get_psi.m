@@ -1,24 +1,24 @@
 function psi = f_get_psi(out_sig, out_prev, in_sig, aux_sig1, aux_sig2, m)
-%% Gets the Psi based on the model structure
-% out_sig:: output system data [y1,..,yn]
-% in_sig:: input system data [u1,..,un]
-% aux_sig1:: input system data [r1,..,rn]
-% aux_sig2:: input system data [rr1,..,rrn]
-% m:: model
-%%
+%====================
+%% Get Psi based on model structure
+% out_sig:: output system data
+% in_sig:: input system data 
+% aux_sig1:: input aux signal 
+% aux_sig2:: input aux signal 
+% m:: model structure
+%====================
 
 % check parameters
 f_check_model(m);
-
-%% step 1 - first estimative
-N=max(size(out_sig));
-psi=zeros(N, m.dim+m.err_model);
 
 if m.err_model && max(size(out_sig)) ~= max(size(out_prev))
     error('out_sig and last out_sig (out_prev) have to have the same size');
 else
     err=out_sig-out_prev;
 end
+
+N = max(size(out_sig));
+psi = zeros(N, m.dim+m.err_model);
 
 for i=max(abs(m.regr))+1:N
     for j=1:m.dim+m.err_model

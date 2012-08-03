@@ -1,17 +1,23 @@
-function theta = f_calc_mmq_theta(m, ul, el)
+function theta = f_calc_mmq_theta(m, out, in)
+%====================
+%% Get theta parameters using LSM
+% m:: Model structure
+% out:: output signal system
+% in:: input signal system
+%====================
 
 phy=zeros(m.N, m.dim);
+out2=zeros(m.N, 1);
 
-ul2=zeros(m.N, 1);
-for k=abs(max(m.regr))+1:m.N
+for k = abs(max(m.regr))+1:m.N
 	for j=1:m.dim
 		if m.eul(j) == 1
-			phy(k, j)=el(k-abs(m.regr(j)));
+			phy(k, j) = in(k-abs(m.regr(j)));
 		else
-			phy(k, j)=ul(k-abs(m.regr(j)));
+			phy(k, j) = out(k-abs(m.regr(j)));
 		end
     end
-    ul2(k)=ul(k);
+    out2(k) = out(k);
 end
-theta=inv(phy'*phy)*phy'*ul2;
+theta = inv(phy'*phy)*phy'*out2;
 end

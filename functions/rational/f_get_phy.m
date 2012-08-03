@@ -1,11 +1,11 @@
 function [phy phym] = f_get_phy(y, m)
-%%%%%%%%%%%%%%%%%%%%
+%====================
 %% Get phy based on model structure
 % y:: output system data [y1,..,yn]
 % m:: model structure
 %
 % Return phy and PHY 
-%%%%%%%%%%%%%%%%%%%%
+%====================
 
 % Check if model parameter structure is valid
 f_check_model(m);
