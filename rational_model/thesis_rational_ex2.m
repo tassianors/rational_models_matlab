@@ -1,6 +1,6 @@
 % Rational Model
 % example extracted from : rational model identification - zhu and billings 1991
-%========================================================================
+%===================================
 close all; clear all;
 clc;
 % get PATH
@@ -21,16 +21,16 @@ theta = zeros(exper, rho_size);
 
 % get PRBS signal
 [in_sig N]=f_get_prbs(m);
-%========================================================================
+%===================================
 % plant simul
-%========================================================================
+%===================================
 y = zeros(N, 1);
 for k=3:N
     y(k)=(a1*y(k-1)+a2*y(k-1)*in_sig(k-1)+a3*in_sig(k-1)) / (in_sig1+b1*y(k-1)^2+b2*y(k-2)^2);
 end
-%========================================================================
+%===================================
 % Controller model definition
-%========================================================================
+%===================================
 model.n_dim      = 2;
 model.dim        = 4;
 model.err_model  = 0;
@@ -61,7 +61,7 @@ c_theta = cov(theta);
 %% Compare results of real system and simulated
 y1=zeros(N, 1);
 for k=3:N
-    y1(k)=(m_theta(1)*y1(k-1)+m_theta(2)*in_sig(k-1))/(1+m_theta(3)*y1(k-1)^2+m_theta(4)*y1(k-2)^2);
+    y1(k)=(m_theta(1)*y1(k-1)+ m_theta(2)*in_sig(k-1)) /(1+ m_theta(3)*y1(k-1)^2+ m_theta(4)*y1(k-2)^2);
 end
 
 err=0;
@@ -74,8 +74,8 @@ in_sig = ones(N,1);
 y1 = zeros(N, 1);
 y  = zeros(N, 1);
 for k=3:N
-    y(k)=(a1*y(k-1)+a2*y(k-1)*in_sig(k-1)+a3*in_sig(k-1))/(1+b1*y(k-1)^2+b2*y(k-2)^2);
-    y1(k)=(m_theta(1)*y1(k-1)+m_theta(2)*in_sig(k-1))/(1+m_theta(3)*y1(k-1)^2+m_theta(4)*y1(k-2)^2);
+    y(k)  = (a1*y(k-1)+ a2*y(k-1)*in_sig(k-1)+ a3*in_sig(k-1)) / (1+b1*y(k-1)^2+ b2*y(k-2)^2);
+    y1(k) = (m_theta(1)*y1(k-1) + m_theta(2)*in_sig(k-1)) / (1+m_theta(3)*y1(k-1)^2+ m_theta(4)*y1(k-2)^2);
 end
 stairs(y(1:40), 'r');
 hold;

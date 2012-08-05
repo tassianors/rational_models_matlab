@@ -65,7 +65,7 @@ for m=1:simul.nEstimates
 		end
 
         psi = f_get_psi(y, yc, u, 0, model);
-        [PHY phy]=f_get_phy(y, model);
+        [PHY phy]=f_get_phi(y, model);
         
         theta(l+1,:)=(psi'*psi-v(l)*PHY)\ (psi'*y-v(l)*phy);
         delta(l,:)=theta(l+1,:)-theta(l,:);

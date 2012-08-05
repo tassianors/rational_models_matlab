@@ -3,6 +3,8 @@
 %================================
 close all; clear all;
 clc;
+P=path;
+path(P,'../functions')
 f_set_path();
 
 % simulation parameters
@@ -64,7 +66,7 @@ for i = 1: exper
     theta(i,:) = f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-2), el(2:max(size(e))), rl(2:max(size(e))), y);
 end
 
-m_theta   = mean(theta);
+mtheta    = mean(theta);
 std_theta = std(theta);
 var_theta = var(theta);
 cov_theta = cov(theta);

@@ -62,10 +62,10 @@ for m=1:simul.nEstimates
         
         % based on user output signal and last estimative, get new psi
         psi = f_get_psi(y, yc, in_sig, aux_sig1, aux_sig2, model);
-        [PHY phy] = f_get_phy(y, model);
+        [PHI phi] = f_get_phi(y, model);
         
         % update theta for next estimative, if needed.
-        theta(l+1,:) = (psi'*psi-v(l)*PHY)\(psi'*y-v(l)*phy);
+        theta(l+1,:) = (psi'*psi-v(l)*PHI)\(psi'*y-v(l)*phi);
         
         % Calc Jy cost function
         costJy(l)=sum(0.5*abs(y-yc).^2)/simul.N;

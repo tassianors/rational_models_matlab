@@ -100,7 +100,7 @@ for m=1:simul.nEstimates
         
         % here I got the phy and Phy matrix
         psi = f_get_psi(y, yc, u, 0, model);
-        [PHY phy]=f_get_phy(y, model);
+        [PHY phy]=f_get_phi(y, model);
         
         % calculating the first aproximation (overwrite the first)
         if use_iv == false
