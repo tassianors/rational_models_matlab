@@ -6,18 +6,18 @@ function theta = f_calc_mmq_theta(m, out, in)
 % in:: input signal system
 %====================
 
-phy=zeros(m.N, m.dim);
+phi=zeros(m.N, m.dim);
 out2=zeros(m.N, 1);
 
 for k = abs(max(m.regr))+1:m.N
 	for j=1:m.dim
 		if m.eul(j) == 1
-			phy(k, j) = in(k-abs(m.regr(j)));
+			phi(k, j) = in(k-abs(m.regr(j)));
 		else
-			phy(k, j) = out(k-abs(m.regr(j)));
+			phi(k, j) = out(k-abs(m.regr(j)));
 		end
     end
     out2(k) = out(k);
 end
-theta = inv(phy'*phy)*phy'*out2;
+theta = inv(phi'*phi)*phi'*out2;
 end

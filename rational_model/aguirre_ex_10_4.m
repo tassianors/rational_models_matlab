@@ -33,7 +33,7 @@ a=2.6204; b=99.875; c=1417.1; d=46.429;
 expected=[8.658 0.001223 -0.0441 -0.08381 0.001766];
 
 for m=1:simul.nEstimates
-    clear theta delta v y yc u psi PHY z_iv l err v_diff;
+    clear theta delta v y yc u psi PHI z_iv l err v_diff;
 	%% initialization variables
 	y=zeros(simul.N, 1);
 	yc=y;
@@ -98,13 +98,13 @@ for m=1:simul.nEstimates
 			v_diff=v(l);
         end
         
-        % here I got the phy and Phy matrix
+        % here I got the phi and Phy matrix
         psi = f_get_psi(y, yc, u, 0, model);
-        [PHY phy]=f_get_phi(y, model);
+        [PHI phi]=f_get_phi(y, model);
         
         % calculating the first aproximation (overwrite the first)
         if use_iv == false
-            theta(l,:)=(psi'*psi-v(l)*PHY)\ (psi'*y-v(l)*phy);
+            theta(l,:)=(psi'*psi-v(l)*PHI)\ (psi'*y-v(l)*phi);
         else
             z_iv = zeros(size(psi));
             for t=size(psi,2)+1:simul.N
@@ -113,7 +113,7 @@ for m=1:simul.nEstimates
                     z_iv(t, size(psi,2)+1-g)=u(t-g);
                 end
             end
-            theta(l,:)=(z_iv'*psi+(l)*PHY)\ (z_iv'*y+v(l)*phy);
+            theta(l,:)=(z_iv'*psi+(l)*PHI)\ (z_iv'*y+v(l)*phi);
         end
         
         if l > 1
