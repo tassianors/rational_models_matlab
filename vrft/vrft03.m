@@ -47,9 +47,9 @@ beta=[tf([1 0 0], C_den, model.TS); tf([1 0],C_den , model.TS);tf([1],C_den , mo
 
 for i = 1: exper
     [el y]=f_get_vrft_el(model, u);
-    phy2=lsim(beta, el);
-    phy=phy2(cut:max(size(phy2)),:,1);
-    theta(i,:)=inv(phy'*phy)*phy'*u(cut:max(size(u)));
+    phi2=lsim(beta, el);
+    phi=phi2(cut:max(size(phi2)),:,1);
+    theta(i,:)=inv(phi'*phi)*phi'*u(cut:max(size(u)));
 end
 
 expect= [0.4 -0.68 0.288];

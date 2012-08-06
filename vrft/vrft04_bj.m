@@ -48,10 +48,10 @@ theta = zeros(exper, rho_size);
 beta=[tf([1 0],[1 -1], model.TS); tf([1],[1 -1], model.TS)];
 for i = 1: exper
     [el y] = f_get_vrft_el(model, u);
-    phy2=lsim(beta, el);
-    phy=phy2(cut:max(size(phy2)),:,1);
+    phi2=lsim(beta, el);
+    phi=phi2(cut:max(size(phi2)),:,1);
     size(u(cut:max(size(u))))
-    theta(i,:)=inv(phy'*phy)*phy'*u(cut:max(size(u)));
+    theta(i,:)=inv(phi'*phi)*phi'*u(cut:max(size(u)));
 end
 
 variance =var(theta);

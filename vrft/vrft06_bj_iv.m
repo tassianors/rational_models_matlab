@@ -55,11 +55,11 @@ for i = 1: exper
     [el y] = f_get_vrft_el(model, u);
     [el2 y2] = f_get_vrft_el(model, u);
     ul=lsim(L,u);
-    phy2=lsim(IV, y);
+    phi2=lsim(IV, y);
     instr2=lsim(IV, y2);
-    phy=phy2(cut:max(size(phy2)),:,1);
+    phi=phi2(cut:max(size(phi2)),:,1);
     instr=instr2(cut:max(size(instr2)),:,1);
-    theta(i,:)=inv(instr'*phy)*instr'*ul(cut:max(size(ul)));
+    theta(i,:)=inv(instr'*phi)*instr'*ul(cut:max(size(ul)));
 end
 
 variance =var(theta);

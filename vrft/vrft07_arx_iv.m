@@ -64,11 +64,11 @@ for t=1:max(size(table_var))
         [el2 y2] = f_get_vrft_el(model, u);
         % apply filter L
         ul     =lsim(L,u);
-        phy2   = lsim(IV, y);
+        phi2   = lsim(IV, y);
         instr2 =lsim(IV, y2);
-        phy    = phy2(cut:max(size(phy2)),:,1);
+        phi    = phi2(cut:max(size(phi2)),:,1);
         instr  = instr2(cut:max(size(instr2)),:,1);
-        theta(i,:) = inv(instr'*phy)*instr'*ul(cut:max(size(ul)));
+        theta(i,:) = inv(instr'*phi)*instr'*ul(cut:max(size(ul)));
     end
     covariance = cov(theta);
     
