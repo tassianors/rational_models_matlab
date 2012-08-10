@@ -70,7 +70,7 @@ m_rat.yplus_regr = [0 0 1 0 0];
 m_rat.err_enable = true
 m_rat.err_size = 1;
 %% Simulation parameters
-simul=struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std, 'maxError', 0.1, 'l', 100, 'diffConv', .1);
+simul=struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std,'l', 100, 'verbose', true);
 
 %========================================================================
 % vrft
@@ -81,7 +81,7 @@ theta0=zeros(1, rho_size);
 for i = 1:exper
     [e yl rl] = f_get_vrft_e_nl(model, u, y);
     ul=lsim(L,u);
-    theta(i,:)=f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-1), e, y(1:max(size(y))-1), rl);
+    [theta(i,:) cost]=f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-1), e, y(1:max(size(y))-1), rl);
 end
 
 mtheta=mean(theta)

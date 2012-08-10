@@ -8,7 +8,7 @@ path(P,'../functions')
 f_set_path();
 
 % simulation parameters
-rho_size = 8;
+theta_size = 8;
 m=1;
 exper = 100;
 
@@ -28,12 +28,12 @@ model.noise_std  = 0.005;
 Td     = tf(model.mn, model.md, model.TS);
 G      = tf(model.b, model.a, model.TS);
 Filter = tf([1],[1 -1], model.TS);
-theta  = zeros(exper, rho_size);
+theta  = zeros(exper, theta_size);
 [u N]  = f_get_prbs(m);
 %================================
 % plant simul
 %================================
-y2=lsim(G,u);
+y2=lsim(G, u);
 %% apply non linearity
 for k=1:N
     y(k)=b1*y2(k)+b3*y2(k)^3;
@@ -42,14 +42,14 @@ end
 % Controller model definition
 %================================
 %% model parameter definition
-m_rat.n_dim      = rho_size;
-m_rat.dim        = rho_size;
+m_rat.n_dim      = theta_size;
+m_rat.dim        = theta_size;
 m_rat.texp       = [1 1 2 3 1 1 2 3];
 m_rat.regr       = [0 0 0 0 1 1 1 1];
 m_rat.yu         = [3 4 4 4 3 4 4 4];
-m_rat.yplus_yur  = zeros(1,rho_size);
-m_rat.yplus_exp  = zeros(1,rho_size);
-m_rat.yplus_regr = zeros(1,rho_size);
+m_rat.yplus_yur  = zeros(1,theta_size);
+m_rat.yplus_exp  = zeros(1,theta_size);
+m_rat.yplus_regr = zeros(1,theta_size);
 m_rat.err_enable = true;
 
 %% Simulation parameters
@@ -63,7 +63,7 @@ for i = 1: exper
     [e y1 rl]  = f_get_vrft_e_nl(model, u, y');
     % Apply filter
     el         = lsim(Filter, e);
-    theta(i,:) = f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-2), el(2:max(size(e))), rl(2:max(size(e))), y);
+    [theta(i,:) cost] = f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-2), el(2:max(size(e))), rl(2:max(size(e))), y);
 end
 
 mtheta    = mean(theta);
@@ -80,11 +80,11 @@ for k=2:N
     % get controller input signal
     e(k) = r(k)-y(k-1);
     uu   = 0;
-    for kk=1:rho_size
-        if kk<=rho_size/2
+    for kk=1:theta_size
+        if kk<=theta_size/2
             uu = uu+mtheta(kk)*e(k)^(kk);    
         else
-            uu = uu+mtheta(kk)*e(k-1)^(kk-rho_size/2);                
+            uu = uu+mtheta(kk)*e(k-1)^(kk-theta_size/2);                
         end
     end
     u2(k)  = u2(k-1)+uu;
@@ -93,8 +93,8 @@ for k=2:N
 end
 
 % get VRFT costs
-f_get_vrft_nl_Jmr(Td,r(1:N-1), y(2:N))
-f_get_vrft_nl_Jvr(u, u2')
+jmr=f_get_vrft_nl_Jmr(Td,r(1:N-1), y(2:N))
+jvr=f_get_vrft_nl_Jvr(u, u2')
 
 %================================
 % Ploting
@@ -108,7 +108,7 @@ v2=zeros(1,N);
 
 for k=1:N
     aux=0;
-    for kk=1:rho_size/2
+    for kk=1:theta_size/2
         aux=aux+(mtheta(kk)/0.8)*e(k)^(kk);    
     end
     v(k)=aux;

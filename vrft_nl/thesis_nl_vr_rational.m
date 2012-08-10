@@ -29,7 +29,6 @@ model.delay_func = tf([1],[1 0], model.TS);
 model.noise_std  = 0.1;
 
 Td = tf(model.mn, model.md, model.TS);
-L  = (1-Td)*Td;
 %================================
 % plant simul
 %================================
@@ -59,7 +58,6 @@ simul = struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std, 'l', 100, 'verb
 %================================
 for i = 1:exper
     [e yl rl] = f_get_vrft_e_nl(model, u, y);
-    ul        = lsim(L,u);
     [theta(i,:) cost] = f_rational_model(simul, c_model, [u(1)], u(1:max(size(u))-1), e, y(1:max(size(y))-1), rl);
 end
 
