@@ -97,18 +97,24 @@ u=zeros(N, 1);
 for k=3:N
     e(k)=r(k)-y(k-1);
     u(k-1)=(mtheta(1)*r(k-1)^m_rat.texp(1)+mtheta(2)*y(k-1)^m_rat.texp(2)+mtheta(3)*y(k-2)^m_rat.texp(3)*r(k-1)^m_rat.yplus_yur(3)+mtheta(4)*y(k-2)^m_rat.texp(4)*y(k-1)^m_rat.yplus_yur(4))/(1+mtheta(5)*y(k-1)^m_rat.texp(5));
-    y(k)=(a1*u(k-1)*y(k-1)+a2*u(k-1))/(1+b1*y(k-2)^2);
+    y(k)=(a1*u(k-2)*y(k-1)+a2*u(k-2))/(1+b1*y(k-2)^2);
 end
 
 ym=step(M, N-2);
-stairs(ym-y(2:N))
+stairs(ym(1:N-2)-y(3:N))
 
 grid;
 title('Erro entre a saida desejada e a obtida com o controlador estimado')
 xlabel('t');
 ylabel('Amplitude');
 
-Jmr_nl=f_get_vrft_nl_Jmr(M,r(1:N-1), y(2:N)')
+figure;
+stairs(ym(1:N-2))
+hold;
+stairs(y(3:N))
+
+
+Jmr_nl=f_get_vrft_nl_Jmr(M,r(1:N-2), y(3:N)')
 
 f_draw_elipse(theta(:,1), theta(:,2), theta0(1), theta0(2));
 f_draw_elipse(theta(:,3), theta(:,4), theta0(3), theta0(4));

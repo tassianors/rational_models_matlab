@@ -42,18 +42,26 @@ end
 % Controller model definition
 %================================
 %% model parameter definition
-m_rat.n_dim      = theta_size;
-m_rat.dim        = theta_size;
-m_rat.texp       = [1 1 2 3 1 1 2 3];
-m_rat.regr       = [0 0 0 0 1 1 1 1];
-m_rat.yu         = [3 4 4 4 3 4 4 4];
-m_rat.yplus_yur  = zeros(1,theta_size);
-m_rat.yplus_exp  = zeros(1,theta_size);
+m_rat.n_dim   = theta_size;
+m_rat.dim     = theta_size;
+% to indo do
+for l=1:m_rat.dim
+    if l<=m_rat.dim/2
+        m_rat.texp(l)=l;
+        m_rat.regr(l)=0;
+    else
+        m_rat.texp(l)=l-m_rat.dim/2;
+        m_rat.regr(l)=1;
+    end
+end
+m_rat.yu      = ones(1,theta_size)*2;
+m_rat.yplus_yur = zeros(1,theta_size);
+m_rat.yplus_exp = zeros(1,theta_size);
 m_rat.yplus_regr = zeros(1,theta_size);
-m_rat.err_enable = true;
+m_rat.err_enable = true
 
 %% Simulation parameters
-simul=struct('N', N-2, 'nEstimates', 1, 'np', model.noise_std, 'l', 100, 'verbose', true);
+simul=struct('N', N-2, 'nEstimates', 1, 'np', model.noise_std, 'l', 100, 'verbose', false);
 
 %================================
 % vrft
@@ -63,14 +71,14 @@ for i = 1: exper
     [e y1 rl]  = f_get_vrft_e_nl(model, u, y');
     % Apply filter
     el         = lsim(Filter, e);
-    [theta(i,:) cost] = f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-2), el(2:max(size(e))), rl(2:max(size(e))), y);
+    [theta(i,:) cost] = f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-2), el(2:max(size(e))), 0, 0);
 end
 
 mtheta    = mean(theta);
 std_theta = std(theta);
 var_theta = var(theta);
 cov_theta = cov(theta);
-
+ooo=y;
 %================================
 % Step simulation
 %================================
@@ -89,7 +97,7 @@ for k=2:N
     end
     u2(k)  = u2(k-1)+uu;
     w(k+1) = gb1*w(k)+ga1*u2(k);
-    y(k)   = (b1*w(k+1)+b3*w(k)^3);
+    y(k)   = (b1*w(k+1)+b3*w(k+1)^3);
 end
 
 % get VRFT costs
@@ -106,7 +114,7 @@ ploting = step(Td);
 v=zeros(1,N);
 v2=zeros(1,N);
 
-for k=1:N
+for k=1:N-1
     aux=0;
     for kk=1:theta_size/2
         aux=aux+(mtheta(kk)/0.8)*e(k)^(kk);    
