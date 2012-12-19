@@ -10,7 +10,7 @@ f_set_path();
 % simulation parameters
 theta_size = 5;
 m          = 2;
-exper      = 100;
+exper      = 10;
 cut        = 1;
 %================================
 % init variables

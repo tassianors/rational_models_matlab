@@ -24,7 +24,17 @@ tic
 f_check_model(model);
 
 if simul.N ~= size(out_sig,1)
-    error('y must be a [1 N] array]');
+    error('out signal must be a [1 N] array]');
+end
+
+if simul.N ~= size(in_sig,1)
+    error('in signal must be a [1 N] array]');
+end
+if simul.N ~= size(aux_sig1,1)
+    error('aux signal must be a [1 N] array]');
+end
+if simul.N ~= size(aux_sig2,1)
+    error('aux signal must be a [1 N] array]');
 end
 
 % init return variable with zeros
