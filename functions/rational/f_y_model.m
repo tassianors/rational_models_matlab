@@ -23,62 +23,6 @@ if m.dim+m.err_model ~= m_dim
 end
 
 for k=max(abs(m.regr))+1:N
-    num=0;
-    for i=1:m.n_dim
-        if m.yu(i) == 1
-            yu = y(k-abs(m.regr(i)))^m.texp(i);
-        elseif m.yu(i) == 2
-            yu = in_sig(k-abs(m.regr(i)))^m.texp(i);
-        elseif m.yu(i) == 3
-            yu = aux_sig1(k-abs(m.regr(i)))^m.texp(i);
-        elseif m.yu(i) == 4
-            yu = aux_sig2(k-abs(m.regr(i)))^m.texp(i);
-        else
-            error('invalid option, just y(1) u(2) r(3) and e(4) are possible')
-        end
-        % non linearity is yu^a*y^b
-        if m.yplus_yur(i) == 1
-            yu = yu*y(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
-        elseif m.yplus_yur(i) == 2
-            yu = yu*in_sig(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
-        elseif m.yplus_yur(i) == 3
-            yu = yu*aux_sig1(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
-        elseif m.yplus_yur(i) == 4
-            yu = yu*aux_sig2(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
-        end
-        num = num+theta(i)*yu;
-    end
-    den = 1;
-    for i=m.n_dim+1:m.dim
-        if m.yu(i) == 1
-            yu = y(k-abs(m.regr(i)))^m.texp(i);
-        elseif m.yu(i) == 2
-            yu = in_sig(k-abs(m.regr(i)))^m.texp(i);
-        elseif m.yu(i) == 3
-            yu = aux_sig1(k-abs(m.regr(i)))^m.texp(i);
-        elseif m.yu(i) == 4
-            yu = aux_sig2(k-abs(m.regr(i)))^m.texp(i);
-        end
-        
-        % non linearity is yu^a*y^b
-        if m.yplus_yur(i) == 1
-            yu = yu*y(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
-        elseif m.yplus_yur(i) == 2
-            yu = yu*in_sig(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
-        elseif m.yplus_yur(i) == 3
-            yu = yu*aux_sig1(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
-        elseif m.yplus_yur(i) == 4
-            yu = yu*aux_sig2(k-abs(m.yplus_regr(i)))^m.yplus_exp(i);
-        end
-        den=den+theta(i)*yu;
-    end
-%    err=0;
-%    if max(size(theta)) > m.dim
-%        for h=m.dim+1:max(size(theta))
-%            err=err+aux_sig2(k)*theta(h);
-%        end
-%    end
-    
-    y(k)= num/den;
+    y(k)=f_y_model_k(k, in_sig, aux_sig1, aux_sig2, theta, m);
 end
 end

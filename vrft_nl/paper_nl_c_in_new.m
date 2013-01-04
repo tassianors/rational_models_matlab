@@ -83,33 +83,36 @@ for i = 1:exper
     [theta(i,:) cost]=f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-1), e, y(1:max(size(y))-1), rl);
 end
 
-mtheta=mean(theta);
-vartheta=var(theta);
-stdtheta=std(theta);
-covtheta=cov(theta);
+mtheta=mean(theta)
+vartheta=var(theta)
+stdtheta=std(theta)
+covtheta=cov(theta)
 
-y=zeros(N, 1);r=ones(N, 1);e=zeros(N, 1);u=zeros(N, 1);
+y2=zeros(N, 1);y=zeros(N, 1);r=ones(N, 1)*2;e=zeros(N, 1);u=zeros(N, 1);ur=zeros(N, 1);
+
 for k=3:N
-    e(k)=r(k)-y(k-1);
-    u(k-1)=f_y_model_k(k, e, y, r, mtheta,  m_rat);
-    y(k)=(a1*u(k-2)*y(k-1)+a2*u(k-2))/(1+b1*y(k-2));
+    e(k)=r(k)-y2(k-1);
+    ur(k-1)=(mtheta(1)*y2(k-m_rat.regr(1))^m_rat.texp(1)*y2(k-m_rat.yplus_regr(1))^m_rat.yplus_yur(1)+    mtheta(2)*y2(k-m_rat.regr(2))^m_rat.texp(2)*y2(k-m_rat.yplus_regr(2))^m_rat.yplus_yur(2)+    mtheta(3)*y2(k-m_rat.regr(3))^m_rat.texp(3)*y2(k-m_rat.yplus_regr(3))^m_rat.yplus_yur(3)+    mtheta(4)*r(k-m_rat.regr(4))^m_rat.texp(4)*y2(k-m_rat.yplus_regr(4))^m_rat.yplus_yur(4)+    mtheta(5)*r(k-m_rat.regr(5))^m_rat.texp(5)*y2(k-m_rat.yplus_regr(5))^m_rat.yplus_yur(5)+    mtheta(6)*r(k-m_rat.regr(6))^m_rat.texp(6)*y2(k-m_rat.yplus_regr(6))^m_rat.yplus_yur(6))/(1+    mtheta(7)*y2(k-m_rat.regr(7))^m_rat.texp(7)*y2(k-m_rat.yplus_regr(7))^m_rat.yplus_yur(7)+    mtheta(8)*y2(k-m_rat.regr(8))^m_rat.texp(8)*y2(k-m_rat.yplus_regr(8))^m_rat.yplus_yur(8));    u(k-1)=ur(k-1);
+    y(k-1)=(a1*u(k-1)*y(k-1)+a2*u(k-1))/(1+b1*y(k-2));
+    y2(k)=y2(k-1)-y(k);
 end
 
 N_plot=20;
-ym=step(M, N_plot-2);
-stairs(ym(1:N_plot-2)-y(3:N_plot))
+ym=step(M, N-2);
+stairs(ym(1:N_plot-2)-y2(3:N_plot))
 
 grid;
 title('Erro entre a saida desejada e a obtida com o controlador estimado')
-xlabel('Time');
+xlabel('t');
 ylabel('Amplitude');
 
 figure;
-stairs(ym(1:N_plot-2), 'r')
+stairs(ym(1:N_plot-2))
 hold;
-stairs(y(3:N_plot), 'g')
+stairs(y2(3:N_plot))
 
-Jmr_nl=f_get_vrft_nl_Jmr(M,r(1:N-2), y(3:N)')
 
-%f_draw_elipse(theta(:,1), theta(:,2), theta0(1), theta0(2));
-%f_draw_elipse(theta(:,3), theta(:,4), theta0(3), theta0(4));
+Jmr_nl=f_get_vrft_nl_Jmr(M,r(1:N-2), y2(3:N)')
+
+f_draw_elipse(theta(:,1), theta(:,2), theta0(1), theta0(2));
+f_draw_elipse(theta(:,3), theta(:,4), theta0(3), theta0(4));
