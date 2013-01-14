@@ -32,4 +32,16 @@ if max(size(model.a_regress)) ~= model.dim
     error('Field #%s size must be the same as #%s', reqFields{5}, reqFields{2});
 end
 
+if max(size(model.b_exp)) ~= model.dim
+    error('Field #%s size must be the same as #%s', reqFields{6}, reqFields{2});
+end
+
+if max(size(model.b_signal_type)) ~= model.dim
+    error('Field #%s size must be the same as #%s', reqFields{7}, reqFields{2});
+end
+
+if max(size(model.b_regress)) ~= model.dim
+    error('Field #%s size must be the same as #%s', reqFields{8}, reqFields{2});
+end
+
 end
