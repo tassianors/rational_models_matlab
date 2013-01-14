@@ -12,15 +12,14 @@ f_set_path();
 %% model parameter definition
 model.n_dim      = 3;
 model.dim        = 5;
-model.texp       = [0 3 2 1 2];
-model.yu         = [1 1 1 1 1];
-model.regr       = [1 1 1 1 1];
-model.yplus_yur  = [0 0 0 0 0];
-model.yplus_exp  = [0 0 0 0 0];
-model.yplus_regr = [0 0 0 0 0];
-model.err_model  = 0;
-model.err_enable = true;
-model.err_size   = 1;
+model.a_exp       = [0 3 2 1 2];
+model.a_signal_type         = [1 1 1 1 1];
+model.a_regress       = [1 1 1 1 1];
+model.b_signal_type  = [0 0 0 0 0];
+model.b_exp  = [0 0 0 0 0];
+model.b_regress = [0 0 0 0 0];
+model.error_model_dim  = 0;
+model.error_in_account = true;
 
 % number of Experiments
 exper=100;
@@ -28,7 +27,7 @@ exper=100;
 simul = struct('N', 200, 'nEstimates', 1, 'np', 0.005, 'verbose', true, 'l', 100); 
 
 % variable init
-rho_size=size(model.texp,2);
+rho_size=size(model.a_exp,2);
 theta = zeros(exper, rho_size);
 y = zeros(simul.N,1);
 % Initial Condition
@@ -38,7 +37,7 @@ y(1)=31.5;
 a=2.6204; b=99.875; c=1417.1; d=46.429;
 
 % Simulation of real system
-for k=max(abs(model.regr))+1:simul.N
+for k=max(abs(model.a_regress))+1:simul.N
     y(k)=d*exp(22-y(k-1))+ ((a*y(k-1)^2-b*y(k-1)+c)/y(k-1));
 end
 

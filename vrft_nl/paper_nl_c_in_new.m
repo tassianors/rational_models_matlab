@@ -53,20 +53,19 @@ end
 %% model parameter definition
 m_rat.n_dim   = rho_size-2;
 m_rat.dim     = rho_size;
-m_rat.err_model =0;
-m_rat.texp    = [1 1 1 1 1 1 1 1];
-m_rat.yu      = [3 3 3 4 4 4 3 3];
-m_rat.regr    = [0 1 2 0 1 2 0 1];
+m_rat.error_model_dim =0;
+m_rat.a_exp    = [1 1 1 1 1 1 1 1];
+m_rat.a_signal_type      = [3 3 3 4 4 4 3 3];
+m_rat.a_regress    = [0 1 2 0 1 2 0 1];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % u = 2 y=1 none =0
-m_rat.yplus_yur = [0 3 3 0 3 3 0 0];
+m_rat.b_signal_type = [0 3 3 0 3 3 0 0];
 % tels the d param
-m_rat.yplus_exp = [0 1 1 0 1 1 0 0];
+m_rat.b_exp = [0 1 1 0 1 1 0 0];
 % tels the C param
-m_rat.yplus_regr = [0 0 0 0 0 0 0 0];
+m_rat.b_regress = [0 0 0 0 0 0 0 0];
 
-m_rat.err_enable = true
-m_rat.err_size = 1;
+m_rat.error_in_account = true
 %% Simulation parameters
 simul=struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std,'l', 100, 'verbose', true);
 
@@ -92,7 +91,7 @@ y2=zeros(N, 1);y=zeros(N, 1);r=ones(N, 1)*2;e=zeros(N, 1);u=zeros(N, 1);ur=zeros
 
 for k=3:N
     e(k)=r(k)-y2(k-1);
-    ur(k-1)=(mtheta(1)*y2(k-m_rat.regr(1))^m_rat.texp(1)*y2(k-m_rat.yplus_regr(1))^m_rat.yplus_yur(1)+    mtheta(2)*y2(k-m_rat.regr(2))^m_rat.texp(2)*y2(k-m_rat.yplus_regr(2))^m_rat.yplus_yur(2)+    mtheta(3)*y2(k-m_rat.regr(3))^m_rat.texp(3)*y2(k-m_rat.yplus_regr(3))^m_rat.yplus_yur(3)+    mtheta(4)*r(k-m_rat.regr(4))^m_rat.texp(4)*y2(k-m_rat.yplus_regr(4))^m_rat.yplus_yur(4)+    mtheta(5)*r(k-m_rat.regr(5))^m_rat.texp(5)*y2(k-m_rat.yplus_regr(5))^m_rat.yplus_yur(5)+    mtheta(6)*r(k-m_rat.regr(6))^m_rat.texp(6)*y2(k-m_rat.yplus_regr(6))^m_rat.yplus_yur(6))/(1+    mtheta(7)*y2(k-m_rat.regr(7))^m_rat.texp(7)*y2(k-m_rat.yplus_regr(7))^m_rat.yplus_yur(7)+    mtheta(8)*y2(k-m_rat.regr(8))^m_rat.texp(8)*y2(k-m_rat.yplus_regr(8))^m_rat.yplus_yur(8));    u(k-1)=ur(k-1);
+    ur(k-1)=(mtheta(1)*y2(k-m_rat.a_regress(1))^m_rat.a_exp(1)*y2(k-m_rat.b_regress(1))^m_rat.b_signal_type(1)+    mtheta(2)*y2(k-m_rat.a_regress(2))^m_rat.a_exp(2)*y2(k-m_rat.b_regress(2))^m_rat.b_signal_type(2)+    mtheta(3)*y2(k-m_rat.a_regress(3))^m_rat.a_exp(3)*y2(k-m_rat.b_regress(3))^m_rat.b_signal_type(3)+    mtheta(4)*r(k-m_rat.a_regress(4))^m_rat.a_exp(4)*y2(k-m_rat.b_regress(4))^m_rat.b_signal_type(4)+    mtheta(5)*r(k-m_rat.a_regress(5))^m_rat.a_exp(5)*y2(k-m_rat.b_regress(5))^m_rat.b_signal_type(5)+    mtheta(6)*r(k-m_rat.a_regress(6))^m_rat.a_exp(6)*y2(k-m_rat.b_regress(6))^m_rat.b_signal_type(6))/(1+    mtheta(7)*y2(k-m_rat.a_regress(7))^m_rat.a_exp(7)*y2(k-m_rat.b_regress(7))^m_rat.b_signal_type(7)+    mtheta(8)*y2(k-m_rat.a_regress(8))^m_rat.a_exp(8)*y2(k-m_rat.b_regress(8))^m_rat.b_signal_type(8));    u(k-1)=ur(k-1);
     y(k-1)=(a1*u(k-1)*y(k-1)+a2*u(k-1))/(1+b1*y(k-2));
     y2(k)=y2(k-1)-y(k);
 end

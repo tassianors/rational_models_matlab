@@ -9,12 +9,12 @@ function theta = f_calc_mmq_theta(m, out, in)
 phi=zeros(m.N, m.dim);
 out2=zeros(m.N, 1);
 
-for k = abs(max(m.regr))+1:m.N
+for k = abs(max(m.a_regress))+1:m.N
 	for j=1:m.dim
 		if m.eul(j) == 1
-			phi(k, j) = in(k-abs(m.regr(j)));
+			phi(k, j) = in(k-abs(m.a_regress(j)));
 		else
-			phi(k, j) = out(k-abs(m.regr(j)));
+			phi(k, j) = out(k-abs(m.a_regress(j)));
 		end
     end
     out2(k) = out(k);

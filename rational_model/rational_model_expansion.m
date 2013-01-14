@@ -20,18 +20,18 @@ a1=.3; a2=-.5; a3=1.5; b1=.2;
 m_rat.n_dim   = 3;
 m_rat.dim     = 4;
 % to indo do
-m_rat.texp    = [2 1 1 3];
-m_rat.yu      = [1 1 2 1];
-m_rat.regr    = [1 2 1 2];
+m_rat.a_exp    = [2 1 1 3];
+m_rat.a_signal_type      = [1 1 2 1];
+m_rat.a_regress    = [1 2 1 2];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % r = 3 u = 2 y=1 none =0
-m_rat.yplus_yur = [0 1 2 0];
+m_rat.b_signal_type = [0 1 2 0];
 % tels the d param
-m_rat.yplus_exp = [0 1 1 0];
+m_rat.b_exp = [0 1 1 0];
 % tels the C param
-m_rat.yplus_regr = [0 1 1 0];
+m_rat.b_regress = [0 1 1 0];
 
-m_rat.err_enable = true
+m_rat.error_in_account = true
 %% Simulation parameters
 simul=struct('N', 300, 'nEstimates', 50, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
 

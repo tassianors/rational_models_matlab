@@ -65,18 +65,18 @@ end
 m_rat.n_dim   = 11;
 m_rat.dim     = 11;
 % to indo do
-m_rat.texp    = [1 1 2 3 4 5 1 2 3 4 5];
-m_rat.yu      = [1 2 2 2 2 2 2 2 2 2 2];
-m_rat.regr    = [1 0 0 0 0 0 1 1 1 1 1];
+m_rat.a_exp    = [1 1 2 3 4 5 1 2 3 4 5];
+m_rat.a_signal_type      = [1 2 2 2 2 2 2 2 2 2 2];
+m_rat.a_regress    = [1 0 0 0 0 0 1 1 1 1 1];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % r = 3 u = 2 y=1 none =0
-m_rat.yplus_yur = [0 0 0 0 0 0 0 0 0 0 0];
+m_rat.b_signal_type = [0 0 0 0 0 0 0 0 0 0 0];
 % tels the d param
-m_rat.yplus_exp = [0 0 0 0 0 0 0 0 0 0 0];
+m_rat.b_exp = [0 0 0 0 0 0 0 0 0 0 0];
 % tels the C param
-m_rat.yplus_regr = [0 0 0 0 0 0 0 0 0 0 0];
+m_rat.b_regress = [0 0 0 0 0 0 0 0 0 0 0];
 
-m_rat.err_enable = true
+m_rat.error_in_account = true
 %% Simulation parameters
 simul=struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std, 'maxError', 0.001, 'l', 100, 'diffConv', .1);
 

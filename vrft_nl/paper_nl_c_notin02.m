@@ -53,22 +53,21 @@ end
 %% model parameter definition
 m_rat.n_dim   = rho_size-2;
 m_rat.dim     = rho_size;
-m_rat.err_model =0;
-m_rat.texp    = [1 1 1 1 1 1 1 1];
-m_rat.yu      = [3 3 3 4 4 4 3 3];
-%m_rat.regr    = [1 1 1 1 1 1 1 2];
-m_rat.regr    = [0 0 0 0 0 0 0 1];
+m_rat.error_model_dim =0;
+m_rat.a_exp        = [1 1 1 1 1 1 1 1];
+m_rat.a_signal_type = [3 3 3 4 4 4 3 3];
+%m_rat.a_regress    = [1 1 1 1 1 1 1 2];
+m_rat.a_regress    = [0 0 0 0 0 0 0 1];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % u = 2 y=1 none =0
-m_rat.yplus_yur = [0 3 3 0 3 3 0 0];
+m_rat.b_signal_type = [0 3 3 0 3 3 0 0];
 % tels the d param
-m_rat.yplus_exp = [0 1 1 0 1 1 0 0];
+m_rat.b_exp = [0 1 1 0 1 1 0 0];
 % tels the C param
-%m_rat.yplus_regr = [0 2 3 0 2 3 0 0];
-m_rat.yplus_regr = [0 1 2 0 1 2 0 0];
+%m_rat.b_regress = [0 2 3 0 2 3 0 0];
+m_rat.b_regress = [0 1 2 0 1 2 0 0];
 
-m_rat.err_enable = true
-m_rat.err_size = 1;
+m_rat.error_in_account = true
 %% Simulation parameters
 simul=struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std,'l', 100, 'verbose', true);
 

@@ -12,7 +12,7 @@ path(P,'../functions')
 model.Ts=1;
 model.N=400;
 %model.dim=4;
-%model.regr = [1 0 1 2];
+%model.a_regress = [1 0 1 2];
 %model.eul= [0 1 1 1];
 
 % input signal
@@ -52,7 +52,7 @@ e=r_virt-y;
 % u(t)=u(t-1)+(0.2+\theta)e(t)-\theta e(t-1)
 
 model.dim=3;
-model.regr = [1 0 1];
+model.a_regress = [1 0 1];
 model.eul= [0 1 1 ];
 teta=f_calc_mmq_theta(model, u, e)
 u_out=zeros(model.N, 1);

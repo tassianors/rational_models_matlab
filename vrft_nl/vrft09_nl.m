@@ -85,19 +85,19 @@ khsgdjg
 m_rat.n_dim   = 6;
 m_rat.dim     = 6;
 % to indo do
-m_rat.texp    = [1 1 1 1 1 1];
-m_rat.yu      = [2 2 2 1 1 1];
-m_rat.regr    = [0 1 2 1 2 3];
+m_rat.a_exp    = [1 1 1 1 1 1];
+m_rat.a_signal_type      = [2 2 2 1 1 1];
+m_rat.a_regress    = [0 1 2 1 2 3];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % r = 3 u = 2 y=1 none =0
-m_rat.yplus_yur =[0 0 0 0 0 0];
+m_rat.b_signal_type =[0 0 0 0 0 0];
 % tels the d param
-m_rat.yplus_exp =[0 0 0 0 0 0];
+m_rat.b_exp =[0 0 0 0 0 0];
 % tels the C param
-m_rat.yplus_regr = [0 0 0 0 0 0];
+m_rat.b_regress = [0 0 0 0 0 0];
 
-m_rat.err_enable = true
-m_rat.err_model = 0;
+m_rat.error_in_account = true
+m_rat.error_model_dim = 0;
 %% Simulation parameters
 simul=struct('N', N, 'nEstimates', exper, 'np', model.noise_std, 'maxError', 0.001, 'l', 100, 'diffConv', .1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

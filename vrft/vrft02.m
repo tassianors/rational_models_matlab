@@ -48,7 +48,7 @@ for i = 1: exper
     %% Controller model
     % u(t)=u(t-1)+0.8e(t)-0.72e(t-1)
     mc.eul = [1 1 1];
-    mc.regr = [2 1 0];
+    mc.a_regress = [2 1 0];
     mc.dim = 3;
     mc.N = N;
 

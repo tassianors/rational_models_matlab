@@ -17,7 +17,7 @@ k=10;
 model.Ts=1;
 model.N=500;
 model.dim=4;
-model.regr = [1 0 1 2];
+model.a_regress = [1 0 1 2];
 model.eul= [0 1 1 1];
 
 M=tf([1-c],[1 -c],model.Ts,'Variable','z');

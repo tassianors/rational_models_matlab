@@ -33,19 +33,18 @@ end
 %===================================
 model.n_dim      = 2;
 model.dim        = 4;
-model.err_model  = 0;
-model.texp       = [1 1 2 2];
-model.yu         = [1 2 1 1];
-model.regr       = [1 1 1 2];
+model.error_model_dim  = 0;
+model.a_exp       = [1 1 2 2];
+model.a_signal_type         = [1 2 1 1];
+model.a_regress       = [1 1 1 2];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % u = 2 y=1 none =0
-model.yplus_yur  = [0 0 0 0];
+model.b_signal_type  = [0 0 0 0];
 % tels the d param
-model.yplus_exp  = [0 0 0 0];
+model.b_exp  = [0 0 0 0];
 % tels the C param
-model.yplus_regr = [0 0 0 0];
-model.err_enable = true
-model.err_size   = 1;
+model.b_regress = [0 0 0 0];
+model.error_in_account = true
 
 %% Simulation parameters
 simul=struct('N', N, 'nEstimates', exper, 'np', 0.005, 'l', 100, 'verbose', true);

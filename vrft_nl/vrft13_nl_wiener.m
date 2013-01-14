@@ -64,18 +64,18 @@ m_rat.dim     = rho_size;
 % to indo do
 for l=1:m_rat.dim
     if l<=m_rat.dim/2
-        m_rat.texp(l)=l;
-        m_rat.regr(l)=0;
+        m_rat.a_exp(l)=l;
+        m_rat.a_regress(l)=0;
     else
-        m_rat.texp(l)=l-m_rat.dim/2;
-        m_rat.regr(l)=1;
+        m_rat.a_exp(l)=l-m_rat.dim/2;
+        m_rat.a_regress(l)=1;
     end
 end
-m_rat.yu      = ones(1,rho_size)*2;
-m_rat.yplus_yur = zeros(1,rho_size);
-m_rat.yplus_exp = zeros(1,rho_size);
-m_rat.yplus_regr = zeros(1,rho_size);
-m_rat.err_enable = true
+m_rat.a_signal_type      = ones(1,rho_size)*2;
+m_rat.b_signal_type = zeros(1,rho_size);
+m_rat.b_exp = zeros(1,rho_size);
+m_rat.b_regress = zeros(1,rho_size);
+m_rat.error_in_account = true
 
 %% Simulation parameters
 simul=struct('N', N-2, 'nEstimates', 1, 'np', model.noise_std, 'maxError', 0.001, 'l', 100, 'diffConv', .1);

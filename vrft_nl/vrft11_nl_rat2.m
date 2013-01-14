@@ -62,20 +62,20 @@ end
 %       1+(y(k-an1)^bn1)*(y(k-cn1)^dn1)+...+(y(k-am)^bm)*(y(k-cm)^dm)+(y(k-ua1)^ub1)*(u(k-uc1)^ud1)+...+(y(k-uan)^ubn)*(u(k-ucn)^udn)
 m_rat.n_dim   = 6;
 m_rat.dim     = 7;
-m_rat.err_model =0;
+m_rat.error_model_dim =0;
 % to indo do
-m_rat.texp    = [1 1 1 1 3 2 1];
-m_rat.yu      = [2 3 3 2 3 3 3];
-m_rat.regr    = [0 1 0 0 1 1 0];
+m_rat.a_exp    = [1 1 1 1 3 2 1];
+m_rat.a_signal_type      = [2 3 3 2 3 3 3];
+m_rat.a_regress    = [0 1 0 0 1 1 0];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % u = 2 y=1 none =0
-m_rat.yplus_yur = [0 0 0 3 0 3 0];
+m_rat.b_signal_type = [0 0 0 3 0 3 0];
 % tels the d param
-m_rat.yplus_exp = [0 0 0 2 0 1 0];
+m_rat.b_exp = [0 0 0 2 0 1 0];
 % tels the C param
-m_rat.yplus_regr = [0 0 0 1 0 0 0];
+m_rat.b_regress = [0 0 0 1 0 0 0];
 
-m_rat.err_enable = true
+m_rat.error_in_account = true
 %% Simulation parameters
 simul=struct('N', N-1, 'nEstimates', exper, 'np', model.noise_std, 'maxError', 0.001, 'l', 100, 'diffConv', .1);
 

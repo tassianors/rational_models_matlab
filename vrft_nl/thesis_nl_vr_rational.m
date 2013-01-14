@@ -41,15 +41,14 @@ end
 %================================
 c_model.n_dim      = 4;
 c_model.dim        = 5;
-c_model.err_model  = 0;
-c_model.texp       = [1 1 1 2 1];
-c_model.yu         = [4 3 4 3 3];
-c_model.regr       = [0 0 0 1 0];
-c_model.yplus_yur  = [0 0 3 3 0];
-c_model.yplus_exp  = [0 0 2 1 0];
-c_model.yplus_regr = [0 0 1 0 0];
-c_model.err_enable = true;
-c_model.err_size   = 1;
+c_model.error_model_dim  = 0;
+c_model.a_exp       = [1 1 1 2 1];
+c_model.a_signal_type         = [4 3 4 3 3];
+c_model.a_regress       = [0 0 0 1 0];
+c_model.b_signal_type  = [0 0 3 3 0];
+c_model.b_exp  = [0 0 2 1 0];
+c_model.b_regress = [0 0 1 0 0];
+c_model.error_in_account = true;
 
 %% Simulation parameters
 simul = struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std, 'l', 100, 'verbose', true);

@@ -13,13 +13,13 @@ path(P,'../functions/rational')
 %% model parameter definition
 model.n_dim   = 3;
 model.dim     = 5;
-model.texp    = [0 3 2 1 2];
-model.yu      = [1 1 1 1 1];
-model.regr    = [1 1 1 1 1];
-model.yplus_yur = [0 0 0 0 0];
-model.yplus_exp = [0 0 0 0 0];
-model.yplus_regr = [0 0 0 0 0];
-model.err_model   = 0;
+model.a_exp    = [0 3 2 1 2];
+model.a_signal_type      = [1 1 1 1 1];
+model.a_regress    = [1 1 1 1 1];
+model.b_signal_type = [0 0 0 0 0];
+model.b_exp = [0 0 0 0 0];
+model.b_regress = [0 0 0 0 0];
+model.error_model_dim   = 0;
 enable=true;
 
 use_iv = false
@@ -40,9 +40,9 @@ for m=1:simul.nEstimates
     u=f_get_square_signal(simul.N);
 	y(1)=23.2;%+rand(1)*.03;
 	
-    model.err_model = 0;
+    model.error_model_dim = 0;
     % Simulation of real system
-%      for k=max(abs(model.regr))+1:simul.N
+%      for k=max(abs(model.a_regress))+1:simul.N
 %          y(k)=d*exp(22-y(k-1))+ ((a*y(k-1)^2-b*y(k-1)+c)/y(k-1));
 %      end
     y = f_aguirre_get_model_output(model, simul, expected,y(1));
@@ -82,10 +82,10 @@ for m=1:simul.nEstimates
             
         % only after the first estimative, calc using the error model
         if l == 1 && enable == true
-            model.err_model = 1;
+            model.error_model_dim = 1;
             % enlarge the matrix
-            theta(l, model.dim+model.err_model)=0;
-            delta(l, model.dim+model.err_model)=0;
+            theta(l, model.dim+model.error_model_dim)=0;
+            delta(l, model.dim+model.error_model_dim)=0;
         end
     
         %% step 2 -  calc the variance between original signal and estimated one
@@ -121,7 +121,7 @@ for m=1:simul.nEstimates
            	clear err;
             err(1,:)=delta(l,:);
             if max(size(err)) > model.dim
-                err(1,model.dim+model.err_model)=0;
+                err(1,model.dim+model.error_model_dim)=0;
             end
         end
 

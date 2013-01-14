@@ -4,16 +4,16 @@ clc;
 %% model parameter definition
 model.n_dim   = 3;
 model.dim     = 4;
-model.texp    = [2 1 1 3];
-model.yu      = [1 1 2 1];
-model.regr    = [1 2 1 2];
+model.a_exp    = [2 1 1 3];
+model.a_signal_type      = [1 1 2 1];
+model.a_regress    = [1 2 1 2];
 % u = 2 y=1 none =0
-model.yplus_yur = [0 0 0 0];
+model.b_signal_type = [0 0 0 0];
 % tels the d param
-model.yplus_exp = [0 0 0 0];
+model.b_exp = [0 0 0 0];
 % tels the C param
-model.yplus_regr = [0 0 0 0];
-model.err_model   = 0;
+model.b_regress = [0 0 0 0];
+model.error_model_dim   = 0;
 enable=true;
 %% Simulation parameters
 simul=struct('N', 200, 'nEstimates', 30, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1); 
@@ -30,9 +30,9 @@ for m=1:simul.nEstimates
 	% initial conditions
 	y(1)=0;
 	y(2)=0;
-    model.err_model = 0;
+    model.error_model_dim = 0;
     %% Simulation of real system
-    for k=max(abs(model.regr))+1:simul.N
+    for k=max(abs(model.a_regress))+1:simul.N
         y(k)=(a1*y(k-1)^2+a2*y(k-2)+a3*u(k-1))/(1+b1*y(k-2)^3);
 	end
 	% set randon noise
@@ -50,10 +50,10 @@ for m=1:simul.nEstimates
     
         % only after the first estimative, calc using the error model
         if l == 2 && enable == true
-            model.err_model = 1;
+            model.error_model_dim = 1;
             % enlarge the matrix
-            theta(l, model.dim+model.err_model)=0;
-            delta(l, model.dim+model.err_model)=0;
+            theta(l, model.dim+model.error_model_dim)=0;
+            delta(l, model.dim+model.error_model_dim)=0;
         end
     
         %% step 2 -  calc the variance
@@ -72,7 +72,7 @@ for m=1:simul.nEstimates
         clear err;
         err(1,:)=delta(l,:);
         if max(size(err)) > model.dim
-            err(1,model.dim+model.err_model)=0;
+            err(1,model.dim+model.error_model_dim)=0;
         end
         % to be used in graphic plotting
         nna(m)=theta(l+1,1);

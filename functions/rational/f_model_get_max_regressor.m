@@ -8,4 +8,4 @@ function max_reg = f_model_get_max_regressor(m)
 
 % Check if model parameter structure is valid
 f_check_model(m);
-max_reg = max(max(abs(m.regr)), max(abs(m.yplus_regr)));
+max_reg = max(max(abs(m.a_regress)), max(abs(m.b_regress)));

@@ -45,7 +45,7 @@ for m=1:simul.nEstimates
     %% init some variables at each estimative
     y = zeros(simul.N, 1);
     yc = y;
-    model.err_model = 0;
+    model.error_model_dim = 0;
     l=1;
 
     % add a random noise with some defined noise power
@@ -60,11 +60,11 @@ for m=1:simul.nEstimates
         yc = f_y_model(ic, in_sig, aux_sig1, aux_sig2, theta(l,:), model);
         
         % only after the first estimative, calc using the error model
-        if l == 2 && model.err_enable == true
-            model.err_model = 1;
+        if l == 2 && model.error_in_account == true
+            model.error_model_dim = 1;
             % enlarge some matrix
-            theta(l, model.dim+model.err_model) = 0;
-            delta(l, model.dim+model.err_model) = 0;
+            theta(l, model.dim+model.error_model_dim) = 0;
+            delta(l, model.dim+model.error_model_dim) = 0;
         end
         
         %% step 2 -  calc covariance

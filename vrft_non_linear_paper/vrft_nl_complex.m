@@ -49,6 +49,6 @@ plot(y, 'r.')
 % u(t)=u(t-1)+(0.2+\theta)e(t)-\theta e(t-1)
 % 
 % model.dim=3;
-% model.regr = [1 0 1];
+% model.a_regress = [1 0 1];
 % model.eul= [0 1 1 ];
 % teta=f_calc_mmq_theta(model, u, e)

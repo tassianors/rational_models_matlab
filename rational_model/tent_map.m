@@ -15,18 +15,18 @@ path(P,'../functions/vrft')
 %% model parameter definition
 model.n_dim   = 3;
 model.dim     = 5;
-model.texp    = [0 2 1 1 2];
-model.yu      = [1 1 1 1 1];
-model.regr    = [1 1 1 1 1];
+model.a_exp    = [0 2 1 1 2];
+model.a_signal_type      = [1 1 1 1 1];
+model.a_regress    = [1 1 1 1 1];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % r = 0 u = 2 y=1 none =0
-model.yplus_yur = [0 0 0 0 0];
+model.b_signal_type = [0 0 0 0 0];
 % tels the d param
-model.yplus_exp = [0 0 0 0 0];
+model.b_exp = [0 0 0 0 0];
 % tels the C param
-model.yplus_regr = [0 0 0 0 0];
-model.err_model   = 0;
-model.err_enable   = true;
+model.b_regress = [0 0 0 0 0];
+model.error_model_dim   = 0;
+model.error_in_account   = true;
 
 %% Simulation parameters
 exper=10;
@@ -38,7 +38,7 @@ theta0=[0.02608 -1.325 1.325 -2.416 2.416];
 
 %Simulation of real system
 y=zeros(simul.N, 1);
-for k=max(abs(model.regr))+1:simul.N
+for k=max(abs(model.a_regress))+1:simul.N
     y(k)=1-a*abs(y(k-1)-b);
 end
 

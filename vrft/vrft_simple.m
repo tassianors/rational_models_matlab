@@ -14,7 +14,7 @@ beta = 0.9;
 model.Ts=1;
 model.N=100;
 model.dim=2;
-model.regr = [0 1];
+model.a_regress = [0 1];
 model.eul= [1 0];
 
 M=tf([1+alpha+beta+alpha*beta],[1+alpha+beta+2*alpha*beta (alpha+beta) 1],model.Ts,'Variable','z^-1');

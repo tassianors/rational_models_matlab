@@ -12,7 +12,7 @@ path(P,'../functions')
 model.Ts=1;
 model.N=10;
 %model.dim=4;
-%model.regr = [1 0 1 2];
+%model.a_regress = [1 0 1 2];
 %model.eul= [0 1 1 1];
 
 % input signal
@@ -52,7 +52,7 @@ plot(y, 'r.')
 % u(t)=u(t-1)+(0.2+\theta)e(t)-\theta e(t-1)
 
 model.dim=3;
-model.regr = [1 0 1];
+model.a_regress = [1 0 1];
 model.eul= [0 1 1 ];
 teta=f_calc_mmq_theta(model, u, e)
 
@@ -60,18 +60,18 @@ teta=f_calc_mmq_theta(model, u, e)
 m_rat.n_dim   = 3;
 m_rat.dim     = 3;
 % to indo do
-m_rat.texp    = [1 1 1];
-m_rat.yu      = [1 2 2];
-m_rat.regr    = [1 0 1];
+m_rat.a_exp    = [1 1 1];
+m_rat.a_signal_type      = [1 2 2];
+m_rat.a_regress    = [1 0 1];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % r = 3 u = 2 y=1 none =0
-m_rat.yplus_yur = [0 0 0];
+m_rat.b_signal_type = [0 0 0];
 % tels the d param
-m_rat.yplus_exp = [0 0 0];
+m_rat.b_exp = [0 0 0];
 % tels the C param
-m_rat.yplus_regr = [0 0 0];
+m_rat.b_regress = [0 0 0];
 
-m_rat.err_enable = true
+m_rat.error_in_account = true
 %% Simulation parameters
 simul=struct('N', model.N, 'nEstimates', 100, 'np', 0.5, 'maxError', 0.01, 'l', 100, 'diffConv', .1);
 ret = f_rational_model(simul, m_rat, u, [u(1)], e)
