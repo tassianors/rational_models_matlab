@@ -20,7 +20,7 @@ end
 N = max(size(out_sig));
 psi = zeros(N, m.dim+m.err_model);
 
-for i=max(abs(m.regr))+1:N
+for i=f_model_get_max_regressor(m)+1:N
     for j=1:m.dim+m.err_model
         % err_model
         if j> m.dim

@@ -16,6 +16,11 @@ if m.dim+m.err_model ~= m_dim
     error('size of theta must be the same as model dimension');
 end
 
+if f_model_get_max_regressor(m) > k
+    error('k is out of bound based on Model parameters.');
+end
+
+
 for i=1:m.n_dim
     if m.yu(i) == 1
         yu = y(k-abs(m.regr(i)))^m.texp(i);

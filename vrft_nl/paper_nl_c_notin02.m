@@ -56,14 +56,16 @@ m_rat.dim     = rho_size;
 m_rat.err_model =0;
 m_rat.texp    = [1 1 1 1 1 1 1 1];
 m_rat.yu      = [3 3 3 4 4 4 3 3];
-m_rat.regr    = [0 1 2 0 1 2 0 1];
+%m_rat.regr    = [1 1 1 1 1 1 1 2];
+m_rat.regr    = [0 0 0 0 0 0 0 1];
 % tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
 % u = 2 y=1 none =0
 m_rat.yplus_yur = [0 3 3 0 3 3 0 0];
 % tels the d param
 m_rat.yplus_exp = [0 1 1 0 1 1 0 0];
 % tels the C param
-m_rat.yplus_regr = [0 0 0 0 0 0 0 0];
+%m_rat.yplus_regr = [0 2 3 0 2 3 0 0];
+m_rat.yplus_regr = [0 1 2 0 1 2 0 0];
 
 m_rat.err_enable = true
 m_rat.err_size = 1;
@@ -89,7 +91,7 @@ stdtheta=std(theta);
 covtheta=cov(theta);
 
 y=zeros(N, 1);r=ones(N, 1);e=zeros(N, 1);u=zeros(N, 1);
-for k=3:N
+for k=f_model_get_max_regressor(m_rat)+1:N
     e(k)=r(k)-y(k-1);
     u(k-1)=f_y_model_k(k, e, y, r, mtheta,  m_rat);
     y(k)=(a1*u(k-2)*y(k-1)+a2*u(k-2))/(1+b1*y(k-2));
