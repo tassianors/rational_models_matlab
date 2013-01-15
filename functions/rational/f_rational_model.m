@@ -93,7 +93,7 @@ for m=1:simul.nEstimates
         end
         l=l+1;
     end
-    % discarding the last estimative, unless we run out by timeout
+    % discarding the last estimative, unless we ran out by timeout
     for o = 1: model.dim
         ret(m,o) = theta(l-1,o);
     end

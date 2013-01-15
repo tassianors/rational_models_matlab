@@ -32,13 +32,14 @@ model.md = [1 -(1-mn)];
 model.TS = Ts;
 model.delay = 1;
 model.delay_func = tf([1],[1 0], model.TS);
-model.noise_std = 0.05;
+model.noise_std = 0.005;
 
 M=tf(model.mn,model.md, model.TS);
-L=(1-M)*M;
 
 theta = zeros(exper, rho_size);
-[u N]=f_get_prbs(m);
+[u2 N]=f_get_prbs(m);
+% we have a integrator between the controller and the plant.
+u=lsim(tf([1],[1 -1], model.TS), u2);
 %u=f_get_square_signal(N);
 %========================================================================
 % plant simul
@@ -56,35 +57,28 @@ m_rat.dim     = rho_size;
 m_rat.error_model_dim =0;
 m_rat.a_exp        = [1 1 1 1 1 1 1 1];
 m_rat.a_signal_type = [3 3 3 4 4 4 3 3];
-%m_rat.a_regress    = [1 1 1 1 1 1 1 2];
 m_rat.a_regress    = [0 0 0 0 0 0 0 1];
-% tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
-% u = 2 y=1 none =0
 m_rat.b_signal_type = [0 3 3 0 3 3 0 0];
-% tels the d param
 m_rat.b_exp = [0 1 1 0 1 1 0 0];
-% tels the C param
-%m_rat.b_regress = [0 2 3 0 2 3 0 0];
 m_rat.b_regress = [0 1 2 0 1 2 0 0];
-
 m_rat.error_in_account = true
+
 %% Simulation parameters
 simul=struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std,'l', 100, 'verbose', true);
 
 %========================================================================
 % vrft
 %========================================================================
-%theta0=[mn/a2 (1-mn)/a2 mn*b1/a2 (1-mn)*b1/a2 a1/a2];
-theta0=zeros(1, rho_size);
+AA=0.4;BB=0.1;CC=0.5;
+theta0=[-AA -BB BB AA BB -BB CC -CC];
 
 for i = 1:exper
     [e yl rl] = f_get_vrft_e_nl(model, u, y);
-    ul=lsim(L,u);
-%    function [ret cost] = f_rational_model(simul, model, ic, out_sig, in_sig, aux_sig1, aux_sig2)
+    %    function [ret cost] = f_rational_model(simul, model, ic, out_sig, in_sig, aux_sig1, aux_sig2)
     [theta(i,:) cost]=f_rational_model(simul, m_rat, [u(1)], u(1:max(size(u))-1), e, y(1:max(size(y))-1), rl);
 end
 
-mtheta=mean(theta);
+mtheta=mean(theta)
 vartheta=var(theta);
 stdtheta=std(theta);
 covtheta=cov(theta);
@@ -92,8 +86,8 @@ covtheta=cov(theta);
 y=zeros(N, 1);r=ones(N, 1);e=zeros(N, 1);u=zeros(N, 1);
 for k=f_model_get_max_regressor(m_rat)+1:N
     e(k)=r(k)-y(k-1);
-    u(k-1)=f_y_model_k(k, e, y, r, mtheta,  m_rat);
-    y(k)=(a1*u(k-2)*y(k-1)+a2*u(k-2))/(1+b1*y(k-2));
+    u(k)=f_y_model_k(k, e, y, r, mtheta,  m_rat);
+    y(k)=(a1*u(k-1)*y(k-1)+a2*u(k-1))/(1+b1*y(k-2));
 end
 
 N_plot=20;
