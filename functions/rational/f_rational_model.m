@@ -30,11 +30,11 @@ end
 if simul.N ~= size(in_sig,1)
     error('in signal must be a [1 N] array]');
 end
-if simul.N ~= size(aux_sig1,1)
-    error('aux signal must be a [1 N] array]');
+if size(aux_sig1,1) > 1 & simul.N ~= size(aux_sig1,1)
+    error('aux 1 signal must be a [1 N] array]');
 end
-if simul.N ~= size(aux_sig2,1)
-    error('aux signal must be a [1 N] array]');
+if size(aux_sig2,1) > 1 & simul.N ~= size(aux_sig2,1)
+    error('aux 2 signal must be a [1 N] array]');
 end
 
 % init return variable with zeros
