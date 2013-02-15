@@ -22,7 +22,7 @@ if m.dim+m.error_model_dim ~= m_dim
     error('size of theta must be the same as model dimension');
 end
 
-for k=max(max(abs(m.a_regress)), max(abs(m.b_regress)))+1:N
+for k=f_model_get_max_regressor(m)+1:N+f_model_get_min_regressor(m)
     y(k)=f_y_model_k(k, in_sig, aux_sig1, aux_sig2, theta, m);
 end
 end

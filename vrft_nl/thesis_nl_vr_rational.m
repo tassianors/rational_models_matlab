@@ -1,5 +1,4 @@
-% VRFT method using a non-linear model
-% real system: y(k)=0.9y(k-1)+tanh(u(t-1))
+% example used on paper. where Cd is represented by C
 %================================
 close all; clear all;
 clc;
@@ -10,7 +9,7 @@ f_set_path();
 % simulation parameters
 theta_size = 5;
 m          = 2;
-exper      = 10;
+exper      = 100;
 cut        = 1;
 %================================
 % init variables
@@ -26,7 +25,7 @@ model.md         = [1 -(1-mn)];
 model.TS         = 1;
 model.delay      = 1;
 model.delay_func = tf([1],[1 0], model.TS);
-model.noise_std  = 0.1;
+model.noise_std  = 0.005;
 
 Td = tf(model.mn, model.md, model.TS);
 %================================
@@ -39,15 +38,15 @@ end
 %================================
 % Controller model definition
 %================================
-c_model.n_dim      = 4;
-c_model.dim        = 5;
+c_model.n_dim            = 4;
+c_model.dim              = 5;
 c_model.error_model_dim  = 0;
-c_model.a_exp       = [1 1 1 2 1];
-c_model.a_signal_type         = [4 3 4 3 3];
-c_model.a_regress       = [0 0 0 1 0];
-c_model.b_signal_type  = [0 0 3 3 0];
-c_model.b_exp  = [0 0 2 1 0];
-c_model.b_regress = [0 0 1 0 0];
+c_model.a_exp            = [1 1 1 2 1];
+c_model.a_signal_type    = [4 3 4 3 3];
+c_model.a_regress        = [0 0 0 1 0];
+c_model.b_signal_type    = [0 0 3 3 0];
+c_model.b_exp            = [0 0 2 1 0];
+c_model.b_regress        = [0 0 1 0 0];
 c_model.error_in_account = true;
 
 %% Simulation parameters

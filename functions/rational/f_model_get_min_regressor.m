@@ -1,4 +1,4 @@
-function max_reg = f_model_get_max_regressor(m)
+function min_reg = f_model_get_min_regressor(m)
 %====================
 %% Get max regressor id based on model information.
 % m:: model structure
@@ -8,5 +8,6 @@ function max_reg = f_model_get_max_regressor(m)
 
 % Check if model parameter structure is valid
 f_check_model(m);
-max_reg = max(max(m.a_regress), max(m.b_regress));
+min_reg = min(min(m.a_regress), min(m.b_regress));
 end
+

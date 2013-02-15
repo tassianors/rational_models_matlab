@@ -47,27 +47,19 @@ y=zeros(N, 1);
 for k=3:N
     y(k)=(a1*u(k-1)*y(k-1)+a2*u(k-1))/(1+b1*y(k-2)^2);
 end
-if max(y) > 10000
-    error('y divergiu');
-end
 %========================================================================
 % Controller model definition
 %========================================================================
 %% model parameter definition
-m_rat.n_dim   = 6;
-m_rat.dim     = 7;
-m_rat.error_model_dim =0;
-m_rat.a_exp    = [1 1 1 1 1 1 1];
-m_rat.a_signal_type      = [4 3 4 3 1 1 3];
-m_rat.a_regress    = [0 0 0 1 1 1 0];
-% tels if there is some non linearity like (y(k-a)^b)*(y(k-c)^d)
-% u = 2 y=1 none =0
-m_rat.b_signal_type = [0 0 3 3 0 3 0];
-% tels the d param
-m_rat.b_exp = [0 0 1 1 0 1 0];
-% tels the C param
-m_rat.b_regress = [0 0 1 0 0 0 0];
-
+m_rat.n_dim           = 6;
+m_rat.dim             = 7;
+m_rat.error_model_dim = 0;
+m_rat.a_exp           = [1 1 1 1 1 1 1];
+m_rat.a_signal_type   = [4 3 4 3 1 1 3];
+m_rat.a_regress       = [0 0 0 1 1 1 0];
+m_rat.b_signal_type   = [0 0 3 3 0 3 0];
+m_rat.b_exp           = [0 0 1 1 0 1 0];
+m_rat.b_regress       = [0 0 1 0 0 0 0];
 m_rat.error_in_account = true
 %% Simulation parameters
 simul=struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std,'l', 100, 'verbose', true);

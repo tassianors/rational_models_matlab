@@ -20,7 +20,7 @@ end
 N = max(size(out_sig));
 psi = zeros(N, m.dim+m.error_model_dim);
 
-for i=f_model_get_max_regressor(m)+1:N
+for i=f_model_get_max_regressor(m)+1:N+f_model_get_min_regressor(m)
     for j=1:m.dim+m.error_model_dim
         % err_model
         if j> m.dim
@@ -30,13 +30,13 @@ for i=f_model_get_max_regressor(m)+1:N
         end
         
         if m.a_signal_type(j) == 1
-            yu=out_sig(i-abs(m.a_regress(j)))^m.a_exp(j);
+            yu=out_sig(i-(m.a_regress(j)))^m.a_exp(j);
         elseif m.a_signal_type(j) == 2
-            yu=in_sig(i-abs(m.a_regress(j)))^m.a_exp(j);
+            yu=in_sig(i-(m.a_regress(j)))^m.a_exp(j);
         elseif m.a_signal_type(j) == 3
-            yu=aux_sig1(i-abs(m.a_regress(j)))^m.a_exp(j);
+            yu=aux_sig1(i-(m.a_regress(j)))^m.a_exp(j);
         elseif m.a_signal_type(j) == 4
-            yu=aux_sig2(i-abs(m.a_regress(j)))^m.a_exp(j);
+            yu=aux_sig2(i-(m.a_regress(j)))^m.a_exp(j);
         else
             error('not supported option');
         end
