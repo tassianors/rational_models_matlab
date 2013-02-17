@@ -18,14 +18,14 @@ path(P,'../functions/vrft')
 % simulation parameters
 rho_size=8;
 cut=1;
-m=2;
+m=2
 
 % static non linearity
 a1=.5;a2=1;b1=.25;
 mn=0.4;
 
 Ts=1;
-exper = 10;
+exper = 100
 
 model.mn = [mn];
 model.md = [1 -(1-mn)];
@@ -53,16 +53,17 @@ y=lsim(tf([1 0],[1 -1], model.TS), w);
 % Controller model definition
 %========================================================================
 %% model parameter definition
-m_rat.n_dim         = rho_size-2;
-m_rat.dim           = rho_size;
-m_rat.error_model_dim =0;
-m_rat.a_exp         = [1 1 1 1 1 1 1 1];
-m_rat.a_signal_type = [4 4 4 3 3 3 3 3];
-m_rat.a_regress     = [0 0 0 0 0 0 0 2];
-m_rat.b_signal_type = [0 3 3 0 3 3 0 0];
-m_rat.b_exp         = [0 1 1 0 1 1 0 0];
-m_rat.b_regress     = [0 1 2 0 1 2 0 0];
+m_rat.n_dim            = rho_size-2;
+m_rat.dim              = rho_size;
+m_rat.error_model_dim  = 0;
 m_rat.error_in_account = true
+
+m_rat.a_exp            = [1 1 1 1 1 1 1 1];
+m_rat.a_signal_type    = [4 4 4 3 3 3 3 3];
+m_rat.a_regress        = [0 1 0 0 0 0 0 1];
+m_rat.b_signal_type    = [0 0 3 0 3 3 0 0];
+m_rat.b_exp            = [0 0 1 0 1 1 0 0];
+m_rat.b_regress        = [0 0 2 0 1 2 0 0];
 
 %% Simulation parameters
 simul=struct('N', N-1, 'nEstimates', 1, 'np', model.noise_std,'l', 100, 'verbose', true);
@@ -82,7 +83,7 @@ end
 mtheta=mean(theta)
 vartheta=var(theta);
 stdtheta=std(theta);
-covtheta=cov(theta);
+covtheta=cov(theta)
 
 y=zeros(N, 1);r=ones(N, 1);e=zeros(N, 1);u=zeros(N, 1);w=zeros(N, 1);
 for k=f_model_get_max_regressor(m_rat)+2:N+f_model_get_min_regressor(m_rat)
@@ -108,5 +109,5 @@ stairs(y(3:N_plot), 'g')
 
 Jmr_nl=f_get_vrft_nl_Jmr(M,r(1:N-2), y(3:N)')
 
-%f_draw_elipse(theta(:,1), theta(:,2), theta0(1), theta0(2));
+f_draw_elipse(theta(:,1), theta(:,2), theta0(1), theta0(2));
 %f_draw_elipse(theta(:,3), theta(:,4), theta0(3), theta0(4));
